@@ -1,4 +1,4 @@
-import { defineConfig, Plugin } from 'vite';
+import { defineConfig, loadEnv, Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 
@@ -81,10 +81,16 @@ function apiDevServerPlugin(): Plugin {
   };
 }
 
-export default defineConfig({
-  plugins: [
-    react(),
-    tailwindcss(),
-    apiDevServerPlugin(),
-  ],
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '');
+  if (env.GROQ_API_KEY && !process.env.GROQ_API_KEY) {
+    process.env.GROQ_API_KEY = env.GROQ_API_KEY;
+  }
+  return {
+    plugins: [
+      react(),
+      tailwindcss(),
+      apiDevServerPlugin(),
+    ],
+  };
 });

@@ -46,44 +46,47 @@ export default async function handler(req, res) {
       return;
     }
 
-    // Call Groq API with ultra-efficient LLaMA 3.1 8B instant model first
-    let response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${activeKey}`,
-      },
-      body: JSON.stringify({
-        model: 'llama-3.1-8b-instant',
-        messages: messages || [],
-        temperature: 0.3,
-        max_tokens: 512,
-      }),
-    });
+    // Call Groq API with ultra-efficient openai/gpt-oss-20b model first (fast, smart reasoning)
+    const candidateModels = [
+      'openai/gpt-oss-20b',
+      'openai/gpt-oss-120b',
+      'qwen/qwen3.8-27b',
+      'llama-3.3-70b-versatile',
+      'llama-3.1-8b-instant',
+    ];
 
-    if (!response.ok) {
-      if (response.status === 429) {
-        await new Promise((r) => setTimeout(r, 1000));
-      }
-      
-      response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${activeKey}`,
-        },
-        body: JSON.stringify({
-          model: 'llama-3.3-70b-versatile',
-          messages: messages || [],
-          temperature: 0.3,
-          max_tokens: 512,
-        }),
-      });
+    let response = null;
+    let successfulModel = '';
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Groq API responded with HTTP ${response.status}: ${errorText}`);
+    for (const model of candidateModels) {
+      try {
+        const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${activeKey}`,
+          },
+          body: JSON.stringify({
+            model,
+            messages: messages || [],
+            temperature: 0.3,
+            max_tokens: 384,
+          }),
+        });
+
+        if (res.ok) {
+          response = res;
+          successfulModel = model;
+          break;
+        }
+        // If 429 or other error, try next candidate model immediately
+      } catch {
+        // Try next model
       }
+    }
+
+    if (!response || !response.ok) {
+      throw new Error('All candidate Groq models failed or returned non-200');
     }
 
     const data = await response.json();

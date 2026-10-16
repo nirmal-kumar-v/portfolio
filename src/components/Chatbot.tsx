@@ -321,48 +321,39 @@ async function requestChatResponse(
 
   // 2. Direct client-side fetch to Groq API via CORS
   if (activeKey) {
-    try {
-      let groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${activeKey}`,
-        },
-        body: JSON.stringify({
-          model: 'llama-3.1-8b-instant',
-          messages: conversationHistory,
-          temperature: 0.3,
-          max_tokens: 512,
-        }),
-      });
+    const candidateModels = [
+      'openai/gpt-oss-20b',
+      'openai/gpt-oss-120b',
+      'qwen/qwen3.8-27b',
+      'llama-3.3-70b-versatile',
+      'llama-3.1-8b-instant',
+    ];
 
-      if (!groqRes.ok) {
-        if (groqRes.status === 429) {
-          await new Promise((r) => setTimeout(r, 1000));
-        }
-
-        groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    for (const model of candidateModels) {
+      try {
+        const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${activeKey}`,
           },
           body: JSON.stringify({
-            model: 'llama-3.3-70b-versatile',
+            model,
             messages: conversationHistory,
             temperature: 0.3,
-            max_tokens: 512,
+            max_tokens: 384,
           }),
         });
-      }
 
-      if (groqRes.ok) {
-        const groqData = await groqRes.json();
-        const reply = groqData?.choices?.[0]?.message?.content;
-        if (reply) return reply;
+        if (groqRes.ok) {
+          const groqData = await groqRes.json();
+          const reply = groqData?.choices?.[0]?.message?.content;
+          if (reply) return reply;
+        }
+        // If 429 or other error, try next candidate model immediately
+      } catch {
+        // Try next candidate model
       }
-    } catch {
-      // Direct call failed
     }
   }
 
@@ -531,6 +522,16 @@ export default function Chatbot() {
       'simp',
       'kiss',
       'flirt',
+      'not real man',
+      'not a man',
+      'not a real man',
+      'fake man',
+      'be a man',
+      'coward',
+      'scared',
+      'liar',
+      'ego',
+      'arrogant',
     ];
 
     const roastReplyMarkers = [
@@ -738,7 +739,7 @@ export default function Chatbot() {
         { role: 'system', content: SYSTEM_PROMPT },
         ...messages
           .filter((m) => m.id !== 'welcome')
-          .slice(-8)
+          .slice(-4)
           .map((m) => ({
             role: m.sender === 'user' ? 'user' : 'assistant',
             content: m.text,
