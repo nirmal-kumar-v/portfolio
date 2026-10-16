@@ -14,6 +14,7 @@ export interface Project {
   responsibilities?: string[];
   team?: string[];
   achievement?: string;
+  awardBadge?: string;
   githubUrl?: string;
   demoUrl?: string;
   statusNotes?: string;
@@ -49,6 +50,7 @@ export const featuredProjects: Project[] = [
     ],
     team: ['Nirmal Kumar V. (Team Lead)', 'Ranjith K.', 'Mohamad Shameer'],
     achievement: '1st Prize — Tamil Mandram 24-Hour Hackathon',
+    awardBadge: '1st Prize · Tamil Mandram 24H',
     demoUrl: 'https://kongu-kural.vercel.app',
     githubUrl: 'https://github.com/nirmal-kumar-v/kongu-kural',
     statusNotes: 'Production deployed website and active public GitHub repository.',
@@ -88,6 +90,7 @@ export const featuredProjects: Project[] = [
       'Rishi Priyan G.',
     ],
     achievement: '1st Place — DevForge 2K26 24-Hour Hackathon',
+    awardBadge: '1st Place · DevForge 2K26 24H',
     githubUrl: 'https://github.com/nirmal-kumar-v/Store-Management-System',
     statusNotes: 'DevForge 2K26 hackathon-winning codebase available on GitHub.',
   },
@@ -125,6 +128,7 @@ export const featuredProjects: Project[] = [
       'Pranesh D.',
     ],
     achievement: '1st Prize — Centre of Excellence (CoE) Hackathon',
+    awardBadge: '1st Prize · CoE Hackathon',
     demoUrl: 'https://optivest-psi.vercel.app/',
     githubUrl: 'https://github.com/nirmal-kumar-v/Portfolio-Risk-and-Return-Optimization',
     statusNotes: 'Centre of Excellence hackathon-winning platform deployed on Vercel with public source code.',
@@ -163,6 +167,7 @@ export const featuredProjects: Project[] = [
     ],
     achievement:
       '1st Place (Red Ribbon Club Hackathon) • 2nd Place (CSI Solo Presentation) • 2nd Place (CSI Team Presentation)',
+    awardBadge: '1st Place · RRC | 2× 2nd · CSI',
     demoUrl: 'https://changewave.tech',
     githubUrl: 'https://github.com/nirmal-kumar-v/changewave',
     statusNotes: 'Live web platform accessible at changewave.tech with public repository on GitHub.',
@@ -198,6 +203,7 @@ export const featuredProjects: Project[] = [
       'VIT Data Quest 3.0: Nirmal Kumar V. (Lead), Praveenkarthick M., Navaneethan S., Lokgesh B., Praveen Kumar, Nisanth K.',
     ],
     achievement: '2nd Prize — KPR College Project Presentation',
+    awardBadge: '2nd Prize · KPR Presentation',
     githubUrl: 'https://github.com/nirmal-kumar-v/careerLens',
     statusNotes:
       'Awarded 2nd Prize at KPR College. Source code repository available on GitHub.',
@@ -237,6 +243,7 @@ export const featuredProjects: Project[] = [
       'Prathisha',
     ],
     achievement: 'Institutional Project Development (Internal College Review)',
+    awardBadge: 'SIH 2026 Internal Review',
     demoUrl: 'https://setu-connect.vercel.app/',
     githubUrl: 'https://github.com/nirmal-kumar-v/SETU',
     statusNotes:

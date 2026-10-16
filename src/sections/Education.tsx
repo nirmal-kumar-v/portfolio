@@ -6,6 +6,7 @@ import {
   Award,
   ChevronDown,
   ChevronUp,
+  ChevronRight,
   Briefcase,
   Building2,
   CheckCircle2,
@@ -96,20 +97,24 @@ export default function Education() {
               <div className="mt-5 pt-4 border-t border-border">
                 <button
                   onClick={() => setShowSchoolDetails(!showSchoolDetails)}
-                  className="btn-tactile w-full py-2 px-3 rounded bg-bg-secondary border border-border text-xs font-mono text-text-secondary hover:text-text-primary hover:border-accent/40 flex items-center justify-between transition-colors"
+                  className="btn-tactile w-full py-2.5 px-3 rounded bg-bg-secondary border border-border text-xs font-mono text-text-secondary hover:text-text-primary hover:border-accent/40 flex items-center justify-between transition-colors"
                 >
-                  <span>School History (10th, 11th, 12th)</span>
-                  {showSchoolDetails ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                  <span className="font-semibold">School Academic History (10th, 11th, 12th)</span>
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 transition-transform duration-300 ${
+                      showSchoolDetails ? 'rotate-180 text-accent' : 'text-text-tertiary'
+                    }`}
+                  />
                 </button>
 
                 {/* Expandable School History */}
-                <AnimatePresence>
+                <AnimatePresence initial={false}>
                   {showSchoolDetails && (
                     <motion.div
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: 'auto', opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
+                      transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                       className="overflow-hidden mt-3 space-y-2.5"
                     >
                       <div className="p-3 rounded bg-bg-secondary/70 border border-border text-xs">
@@ -156,11 +161,11 @@ export default function Education() {
                 <div
                   key={exp.id}
                   onClick={() => setSelectedExperience(exp)}
-                  className="pixel-card p-4 rounded-lg border border-border hover:border-accent/40 cursor-pointer transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                  className="pixel-card group p-4 rounded-lg border border-border hover:border-accent/40 cursor-pointer transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-bg-card hover:bg-bg-card-hover"
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-mono font-bold text-text-primary">
+                      <span className="text-xs font-mono font-bold text-text-primary group-hover:text-accent-light transition-colors">
                         {exp.title}
                       </span>
                       <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-accent/10 border border-accent/20 text-accent-light">
@@ -175,9 +180,9 @@ export default function Education() {
                     </p>
                   </div>
 
-                  <span className="text-xs font-mono text-accent-light flex items-center gap-1 self-start sm:self-center flex-shrink-0">
-                    <span>Details</span>
-                    <ChevronDown className="w-3.5 h-3.5" />
+                  <span className="text-xs font-mono text-accent-light flex items-center gap-1 self-start sm:self-center flex-shrink-0 group-hover:translate-x-0.5 transition-transform">
+                    <span>Inspect</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
                   </span>
                 </div>
               ))}

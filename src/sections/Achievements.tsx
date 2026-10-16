@@ -22,7 +22,7 @@ function AchievementCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.35, delay: index * 0.05 }}
-      className="group"
+      className="group w-full"
     >
       <div
         onClick={() => setExpanded(!expanded)}
@@ -30,7 +30,13 @@ function AchievementCard({
           isFirst
             ? 'border-gold/30 hover:border-gold/60 bg-bg-card'
             : 'border-border hover:border-accent/40 bg-bg-card'
-        } ${expanded ? 'bg-bg-card-hover shadow-lg' : ''}`}
+        } ${
+          expanded
+            ? isFirst
+              ? 'bg-bg-card-hover border-gold/60 shadow-[0_0_20px_rgba(234,179,8,0.12)]'
+              : 'bg-bg-card-hover border-accent/50 shadow-[0_0_20px_rgba(56,189,248,0.1)]'
+            : ''
+        }`}
       >
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3.5 flex-1 min-w-0">
@@ -46,7 +52,7 @@ function AchievementCard({
             </div>
 
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 flex-wrap mb-1">
+              <div className="flex items-center gap-2 flex-wrap mb-1.5">
                 <span
                   className={`text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded ${
                     isFirst
@@ -56,12 +62,12 @@ function AchievementCard({
                 >
                   {achievement.result}
                 </span>
-                <span className="text-[10px] font-mono text-text-tertiary uppercase">
+                <span className="text-[10px] font-mono text-text-tertiary uppercase px-1.5 py-0.5 rounded bg-bg-secondary border border-border">
                   {achievement.category}
                 </span>
               </div>
 
-              <h4 className="text-base sm:text-lg font-bold text-text-primary leading-snug">
+              <h4 className="text-base sm:text-lg font-bold text-text-primary leading-snug group-hover:text-accent-light transition-colors">
                 {achievement.event}
               </h4>
 
@@ -75,35 +81,46 @@ function AchievementCard({
             </div>
           </div>
 
-          <button
-            className="p-1 rounded text-text-tertiary hover:text-text-primary hover:bg-white/5 transition-colors flex-shrink-0"
+          {/* Smooth Rotating Chevron Indicator */}
+          <div
+            className={`p-1.5 rounded transition-all flex-shrink-0 ${
+              expanded
+                ? 'bg-accent/15 text-accent border border-accent/30'
+                : 'text-text-tertiary group-hover:text-text-primary border border-transparent'
+            }`}
             aria-label={expanded ? 'Collapse' : 'Expand'}
           >
-            {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-          </button>
+            <ChevronDown
+              className={`w-4 h-4 transition-transform duration-300 ease-out ${
+                expanded ? 'rotate-180 text-accent' : 'text-text-tertiary'
+              }`}
+            />
+          </div>
         </div>
 
-        {/* Revealed on click: Progressive Disclosure */}
-        <AnimatePresence>
+        {/* Revealed on click: Progressive Disclosure with smooth height animation */}
+        <AnimatePresence initial={false}>
           {expanded && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
               className="overflow-hidden"
             >
-              <div className="mt-4 pt-4 border-t border-border/60 space-y-3 text-xs">
+              <div className="mt-4 pt-4 border-t border-border/60 space-y-3.5 text-xs">
                 {/* Role */}
-                <div className="font-mono">
-                  <span className="text-text-tertiary uppercase">Role: </span>
-                  <span className="text-text-primary font-semibold">{achievement.role}</span>
+                <div className="font-mono flex items-center gap-2">
+                  <span className="text-text-tertiary uppercase">Role:</span>
+                  <span className="text-text-primary font-semibold px-2 py-0.5 rounded bg-bg-secondary border border-border">
+                    {achievement.role}
+                  </span>
                 </div>
 
                 {/* Team */}
                 {achievement.team.length > 0 && (
                   <div>
-                    <span className="text-[10px] font-mono text-text-tertiary uppercase block mb-1">
+                    <span className="text-[10px] font-mono text-text-tertiary uppercase block mb-1.5">
                       Confirmed Team
                     </span>
                     <div className="flex flex-wrap gap-1.5">
@@ -123,7 +140,7 @@ function AchievementCard({
                 {/* Tech / Skills */}
                 {achievement.technologies && (
                   <div>
-                    <span className="text-[10px] font-mono text-text-tertiary uppercase block mb-1">
+                    <span className="text-[10px] font-mono text-text-tertiary uppercase block mb-1.5">
                       Key Competencies / Stack
                     </span>
                     <div className="flex flex-wrap gap-1">
@@ -163,6 +180,11 @@ function AchievementCard({
                     )}
                   </div>
                 )}
+
+                <div className="pt-1 text-[10px] font-mono text-text-tertiary flex items-center justify-between">
+                  <span>Record confirmed</span>
+                  <span className="text-accent-light">Click card to collapse ▲</span>
+                </div>
               </div>
             </motion.div>
           )}
@@ -224,8 +246,8 @@ export default function Achievements() {
           </div>
         </div>
 
-        {/* 9 Achievements Grid */}
-        <div className="grid md:grid-cols-2 gap-4">
+        {/* 9 Achievements Grid - items-start prevents sibling cards from awkward vertical stretching */}
+        <div className="grid md:grid-cols-2 gap-4 items-start">
           <AnimatePresence mode="popLayout">
             {filtered.map((ach, idx) => (
               <AchievementCard key={ach.id} achievement={ach} index={idx} />

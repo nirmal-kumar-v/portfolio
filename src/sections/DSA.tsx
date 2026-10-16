@@ -171,7 +171,11 @@ export default function DSA() {
                   <ExternalLink className="w-3.5 h-3.5" />
                 </a>
                 <span className="p-2 text-text-tertiary">
-                  {selectedPanel === 'leetcode' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform duration-300 ${
+                      selectedPanel === 'leetcode' ? 'rotate-180 text-accent' : 'text-text-tertiary'
+                    }`}
+                  />
                 </span>
               </div>
             </div>
@@ -199,7 +203,7 @@ export default function DSA() {
             {/* Hint to expand/collapse */}
             <div className="mt-4 text-[11px] font-mono text-accent-light flex items-center justify-between">
               <span>{selectedPanel === 'leetcode' ? 'Click to collapse details' : 'Click to inspect difficulty breakdown'}</span>
-              <span>{selectedPanel === 'leetcode' ? '▲' : '▼'}</span>
+              <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${selectedPanel === 'leetcode' ? 'rotate-180' : ''}`} />
             </div>
           </div>
 
@@ -256,7 +260,11 @@ export default function DSA() {
                   <ExternalLink className="w-3.5 h-3.5" />
                 </a>
                 <span className="p-2 text-text-tertiary">
-                  {selectedPanel === 'gfg' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform duration-300 ${
+                      selectedPanel === 'gfg' ? 'rotate-180 text-emerald' : 'text-text-tertiary'
+                    }`}
+                  />
                 </span>
               </div>
             </div>
@@ -284,7 +292,7 @@ export default function DSA() {
             {/* Hint to expand/collapse */}
             <div className="mt-4 text-[11px] font-mono text-emerald flex items-center justify-between">
               <span>{selectedPanel === 'gfg' ? 'Click to collapse details' : 'Click to inspect GFG profile stats'}</span>
-              <span>{selectedPanel === 'gfg' ? '▲' : '▼'}</span>
+              <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${selectedPanel === 'gfg' ? 'rotate-180' : ''}`} />
             </div>
           </div>
         </div>

@@ -38,62 +38,83 @@ function FeaturedCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.4, delay: index * 0.07 }}
-      className="group"
+      className="group h-full flex flex-col"
     >
       <div
         onClick={() => onOpenDetails(project)}
-        className="pixel-card rounded-lg h-full flex flex-col justify-between p-6 cursor-pointer border border-border hover:border-accent/40 transition-all select-none relative overflow-hidden"
+        className="pixel-card rounded-lg h-full flex flex-col justify-between p-6 cursor-pointer border border-border hover:border-accent/40 transition-all select-none relative overflow-hidden bg-bg-card hover:bg-bg-card-hover"
       >
-        <div>
-          {/* Top category & order badge */}
-          <div className="flex items-center justify-between gap-2 mb-3">
-            <span className="text-[10px] font-mono tracking-wider uppercase px-2 py-0.5 rounded bg-bg-secondary border border-border text-accent-light">
+        <div className="flex flex-col flex-1">
+          {/* Top category & order badge - fixed height h-6 */}
+          <div className="flex items-center justify-between gap-2 h-6 mb-3">
+            <span className="text-[10px] font-mono tracking-wider uppercase px-2 py-0.5 rounded bg-bg-secondary border border-border text-accent-light truncate max-w-[220px]">
               {project.category}
             </span>
-            <span className="text-[10px] font-mono text-text-tertiary">
+            <span className="text-[10px] font-mono text-text-tertiary flex-shrink-0">
               #{String(project.order).padStart(2, '0')}
             </span>
           </div>
 
-          {/* Project Name */}
-          <h3 className="text-xl font-bold text-text-primary group-hover:text-accent-light transition-colors leading-snug">
-            {project.name}
-          </h3>
+          {/* Project Name: Fixed height h-14 so 1-line or 2-line titles always align perfectly */}
+          <div className="h-14 flex items-center">
+            <h3 className="text-lg sm:text-xl font-bold text-text-primary group-hover:text-accent-light transition-colors leading-snug line-clamp-2">
+              {project.name}
+            </h3>
+          </div>
 
-          <p className="text-xs font-mono text-text-tertiary mt-1">
-            Role: <span className="text-text-secondary">{project.role}</span>
-          </p>
+          {/* Role: strictly 1 line with fixed height h-5 */}
+          <div className="h-5 flex items-center text-xs font-mono text-text-tertiary mt-1 truncate">
+            <span>Role:</span>
+            <span className="text-text-secondary ml-1.5 truncate font-medium">
+              {project.role}
+            </span>
+          </div>
 
-          {/* Short 1-2 sentence overview */}
-          <p className="text-sm text-text-secondary mt-3 line-clamp-3 leading-relaxed">
+          {/* Short 1-2 sentence overview: fixed height h-16 (3 lines) */}
+          <p className="text-xs sm:text-sm text-text-secondary mt-3 line-clamp-3 leading-relaxed h-[4.25rem] overflow-hidden">
             {project.overview}
           </p>
 
-          {/* Award badge if applicable */}
-          {project.achievement && (
-            <div className="mt-4 inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-gold/10 border border-gold/30 text-gold text-xs font-mono">
-              <Trophy className="w-3.5 h-3.5 flex-shrink-0" />
-              <span className="truncate">{project.achievement}</span>
-            </div>
-          )}
+          {/* Award badge: fixed height slot h-8 with clean punchy badge */}
+          <div className="mt-3.5 h-8 flex items-center">
+            {project.awardBadge ? (
+              <div
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-gold/10 border border-gold/30 text-gold text-xs font-mono max-w-full"
+                title={project.achievement}
+              >
+                <Trophy className="w-3.5 h-3.5 flex-shrink-0" />
+                <span className="truncate">{project.awardBadge}</span>
+              </div>
+            ) : project.achievement ? (
+              <div
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-gold/10 border border-gold/30 text-gold text-xs font-mono max-w-full"
+                title={project.achievement}
+              >
+                <Trophy className="w-3.5 h-3.5 flex-shrink-0" />
+                <span className="truncate">{project.achievement}</span>
+              </div>
+            ) : (
+              <div className="h-full" />
+            )}
+          </div>
 
-          {/* Technology summary */}
-          <div className="mt-4 flex flex-wrap gap-1.5">
-            {project.technologies.slice(0, 4).map((tech) => (
+          {/* Technology summary: fixed height slot h-7 strictly single row */}
+          <div className="mt-3.5 h-7 flex items-center gap-1.5 overflow-hidden flex-nowrap">
+            {project.technologies.slice(0, 3).map((tech) => (
               <TechBadge key={tech} name={tech} size="sm" />
             ))}
-            {project.technologies.length > 4 && (
-              <span className="text-[10px] font-mono text-text-tertiary px-1.5 py-0.5">
-                +{project.technologies.length - 4}
+            {project.technologies.length > 3 && (
+              <span className="text-[10px] font-mono text-text-tertiary px-1.5 py-0.5 rounded bg-bg-secondary border border-border flex-shrink-0">
+                +{project.technologies.length - 3}
               </span>
             )}
           </div>
         </div>
 
-        {/* Card Footer */}
-        <div className="mt-6 pt-4 border-t border-border flex items-center justify-between text-xs">
+        {/* Card Footer: Pinned to bottom with mt-auto, exact same height across all cards */}
+        <div className="mt-5 pt-3.5 border-t border-border flex items-center justify-between text-xs h-11">
           <div className="flex items-center gap-2">
-            {project.demoUrl && (
+            {project.demoUrl ? (
               <a
                 href={project.demoUrl}
                 target="_blank"
@@ -105,6 +126,10 @@ function FeaturedCard({
                 <span>Live</span>
                 <ExternalLink className="w-3 h-3" />
               </a>
+            ) : (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-bg-secondary/60 border border-border/50 text-text-tertiary text-[11px] font-mono">
+                Direct Code
+              </span>
             )}
             {project.githubUrl && (
               <a
@@ -119,14 +144,9 @@ function FeaturedCard({
                 <span>Code</span>
               </a>
             )}
-            {!project.demoUrl && !project.githubUrl && (
-              <span className="text-[10px] font-mono text-text-tertiary">
-                Details on click
-              </span>
-            )}
           </div>
 
-          <span className="text-accent-light font-mono text-xs flex items-center gap-0.5 group-hover:translate-x-0.5 transition-transform">
+          <span className="text-accent-light font-mono text-xs flex items-center gap-0.5 group-hover:translate-x-0.5 transition-transform flex-shrink-0">
             <span>Explore</span>
             <ChevronRight className="w-3.5 h-3.5" />
           </span>
@@ -182,28 +202,28 @@ export default function Projects() {
               <div
                 key={item.id}
                 onClick={() => setSelectedMoreProject(item)}
-                className="pixel-card p-4 rounded-md cursor-pointer border border-border hover:border-accent/30 transition-all flex flex-col justify-between"
+                className="pixel-card p-4 rounded-md cursor-pointer border border-border hover:border-accent/30 transition-all flex flex-col justify-between h-full bg-bg-card hover:bg-bg-card-hover"
               >
                 <div>
-                  <div className="flex items-center justify-between text-[10px] font-mono text-text-tertiary mb-2">
-                    <span className="text-accent-light uppercase">{item.category}</span>
-                    <span>{item.role}</span>
+                  <div className="flex items-center justify-between text-[10px] font-mono text-text-tertiary mb-2 h-5">
+                    <span className="text-accent-light uppercase truncate max-w-[150px]">{item.category}</span>
+                    <span className="truncate max-w-[110px]">{item.role}</span>
                   </div>
-                  <h4 className="font-bold text-sm text-text-primary mb-1">
+                  <h4 className="font-bold text-sm text-text-primary mb-1 h-10 flex items-center line-clamp-2">
                     {item.name}
                   </h4>
-                  <p className="text-xs text-text-secondary line-clamp-2 leading-relaxed">
+                  <p className="text-xs text-text-secondary line-clamp-2 leading-relaxed h-9 overflow-hidden">
                     {item.description}
                   </p>
                 </div>
 
-                <div className="mt-3 pt-2 border-t border-border/40 flex items-center justify-between text-[11px] font-mono text-text-tertiary">
+                <div className="mt-3 pt-2 border-t border-border/40 flex items-center justify-between text-[11px] font-mono text-text-tertiary h-6">
                   {item.achievement ? (
-                    <span className="text-gold truncate max-w-[180px]">{item.achievement}</span>
+                    <span className="text-gold truncate max-w-[190px]">{item.achievement}</span>
                   ) : (
-                    <span>Click for summary</span>
+                    <span>Inspect summary</span>
                   )}
-                  <ChevronRight className="w-3.5 h-3.5 text-accent-light" />
+                  <ChevronRight className="w-3.5 h-3.5 text-accent-light flex-shrink-0" />
                 </div>
               </div>
             ))}
