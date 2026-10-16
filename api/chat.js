@@ -46,7 +46,7 @@ export default async function handler(req, res) {
       return;
     }
 
-    // Call Groq API with flagship LLaMA 3.3 70B model first, fallback to 8B instant
+    // Call Groq API with ultra-efficient LLaMA 3.1 8B instant model first
     let response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -54,15 +54,14 @@ export default async function handler(req, res) {
         Authorization: `Bearer ${activeKey}`,
       },
       body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
+        model: 'llama-3.1-8b-instant',
         messages: messages || [],
-        temperature: 0.4,
-        max_tokens: 1024,
+        temperature: 0.3,
+        max_tokens: 512,
       }),
     });
 
     if (!response.ok) {
-      // If rate limited or error, wait 1 second and try with 8b instant model
       if (response.status === 429) {
         await new Promise((r) => setTimeout(r, 1000));
       }
@@ -74,10 +73,10 @@ export default async function handler(req, res) {
           Authorization: `Bearer ${activeKey}`,
         },
         body: JSON.stringify({
-          model: 'llama-3.1-8b-instant',
+          model: 'llama-3.3-70b-versatile',
           messages: messages || [],
-          temperature: 0.4,
-          max_tokens: 1024,
+          temperature: 0.3,
+          max_tokens: 512,
         }),
       });
 

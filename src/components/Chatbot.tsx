@@ -7,9 +7,6 @@ import {
   Sparkles,
   ExternalLink,
   RotateCcw,
-  Key,
-  ShieldCheck,
-  Check,
   Award,
   Clock,
 } from 'lucide-react';
@@ -332,10 +329,10 @@ async function requestChatResponse(
           Authorization: `Bearer ${activeKey}`,
         },
         body: JSON.stringify({
-          model: 'llama-3.3-70b-versatile',
+          model: 'llama-3.1-8b-instant',
           messages: conversationHistory,
-          temperature: 0.4,
-          max_tokens: 1024,
+          temperature: 0.3,
+          max_tokens: 512,
         }),
       });
 
@@ -351,10 +348,10 @@ async function requestChatResponse(
             Authorization: `Bearer ${activeKey}`,
           },
           body: JSON.stringify({
-            model: 'llama-3.1-8b-instant',
+            model: 'llama-3.3-70b-versatile',
             messages: conversationHistory,
-            temperature: 0.4,
-            max_tokens: 1024,
+            temperature: 0.3,
+            max_tokens: 512,
           }),
         });
       }
@@ -379,11 +376,15 @@ export default function Chatbot() {
   const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [groqKey, setGroqKey] = useState<string>('');
-  const [showSettings, setShowSettings] = useState(false);
-  const [keySaved, setKeySaved] = useState(false);
+  const [groqKey] = useState<string>(() => {
+    try {
+      return localStorage.getItem('nkv_groq_key') || '';
+    } catch {
+      return '';
+    }
+  });
 
-  // Initialize cooldown remaining from localStorage so page refreshes preserve punishment
+  // Initialize cooldown remaining from localStorage so page refreshes preserve punishment / rate limit
   const [cooldown, setCooldown] = useState<number>(() => {
     try {
       const stored = localStorage.getItem(STORAGE_COOLDOWN_KEY);
@@ -401,18 +402,6 @@ export default function Chatbot() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem('nkv_groq_key') || '';
-    if (saved) setGroqKey(saved);
-  }, []);
-
-  const saveKey = (val: string) => {
-    setGroqKey(val);
-    localStorage.setItem('nkv_groq_key', val.trim());
-    setKeySaved(true);
-    setTimeout(() => setKeySaved(false), 2000);
-  };
-
-  useEffect(() => {
     if (isOpen) {
       setTimeout(() => textareaRef.current?.focus(), 150);
     }
@@ -422,7 +411,16 @@ export default function Chatbot() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isLoading]);
 
-  const triggerCooldown = (seconds = 10) => {
+  const triggerCooldown = (seconds: number) => {
+    if (seconds <= 0) {
+      setCooldown(0);
+      try {
+        localStorage.removeItem(STORAGE_COOLDOWN_KEY);
+      } catch {
+        // Ignore
+      }
+      return;
+    }
     const until = Date.now() + seconds * 1000;
     try {
       localStorage.setItem(STORAGE_COOLDOWN_KEY, String(until));
@@ -432,7 +430,7 @@ export default function Chatbot() {
     setCooldown(seconds);
   };
 
-  // Real-time synced 10-Second Penalty Cooldown (survives page reloads)
+  // Real-time synced Cooldown (survives page reloads)
   useEffect(() => {
     const checkTimer = () => {
       try {
@@ -460,14 +458,15 @@ export default function Chatbot() {
     return () => clearInterval(timer);
   }, [cooldown]);
 
-  const checkPunishmentTrigger = (
+  const determineCooldownDuration = (
     query: string,
-    reply: string
-  ): { shouldPunish: boolean; duration: number; isRoast: boolean } => {
-    const q = query.toLowerCase();
-    const r = reply.toLowerCase();
+    reply: string,
+    history: ChatMessage[]
+  ): { duration: number; isRoastOrSecurity: boolean; isSequential: boolean } => {
+    const q = query.toLowerCase().trim();
+    const r = reply.toLowerCase().trim();
 
-    // 1. Trolling / Insults / Hate -> WILD ROAST -> DOUBLE TIME = 20 SECONDS!
+    // 1. Trolling / Insults / Hate -> 2 MINUTES (120 SECONDS)
     const trollInsultWords = [
       'waste',
       'useless',
@@ -509,6 +508,8 @@ export default function Chatbot() {
       'hate',
       'who cares',
       'why hire',
+      'drop out',
+      'clueless',
     ];
 
     const roastReplyMarkers = [
@@ -533,10 +534,10 @@ export default function Chatbot() {
       roastReplyMarkers.some((marker) => r.includes(marker));
 
     if (isTroll) {
-      return { shouldPunish: true, duration: 20, isRoast: true };
+      return { duration: 120, isRoastOrSecurity: true, isSequential: false };
     }
 
-    // 2. Sensitive / Family / Secrets -> 10 SECONDS
+    // 2. Sensitive / Privacy intrusions / Secrets / Jailbreak / API Key -> 2 MINUTES (120 SECONDS)
     const sensitiveWords = [
       'api key',
       'apikey',
@@ -582,6 +583,7 @@ export default function Chatbot() {
       "can't share that information",
       'cannot share that information',
       'private family',
+      'strictly private',
     ];
 
     const isSensitive =
@@ -589,10 +591,85 @@ export default function Chatbot() {
       privacyReplies.some((marker) => r.includes(marker));
 
     if (isSensitive) {
-      return { shouldPunish: true, duration: 10, isRoast: false };
+      return { duration: 120, isRoastOrSecurity: true, isSequential: false };
     }
 
-    return { shouldPunish: false, duration: 0, isRoast: false };
+    // 3. Sequential Follow-ups -> 0 SECONDS (NO COOLDOWN!)
+    const botMessages = history.filter((m) => m.sender === 'bot');
+    const lastBotMsg = botMessages.length > 0 ? botMessages[botMessages.length - 1] : null;
+    const lastBotText = lastBotMsg ? lastBotMsg.text.toLowerCase() : '';
+
+    // Condition 3A: The previous bot response asked a clarification question
+    const botAskedClarification =
+      lastBotText.includes('which semester') ||
+      lastBotText.includes('which standard') ||
+      lastBotText.includes('10th or 12th') ||
+      lastBotText.includes('standard marks') ||
+      lastBotText.includes('which accomplishment') ||
+      lastBotText.includes('proof for?') ||
+      lastBotText.includes('event would you like proof for') ||
+      lastBotText.includes('would you like to check') ||
+      lastBotText.trim().endsWith('?');
+
+    // Direct answers to clarifications
+    const isDirectClarificationAnswer =
+      q.includes('10th') ||
+      q.includes('11th') ||
+      q.includes('12th') ||
+      q.includes('sem') ||
+      q.includes('semester') ||
+      ['1', '2', '3', '4'].includes(q) ||
+      q.includes('tamil') ||
+      q.includes('mandram') ||
+      q.includes('devforge') ||
+      q.includes('wele') ||
+      q.includes('mist') ||
+      q.includes('nptel') ||
+      q.includes('shaastra') ||
+      q.includes('dataquest') ||
+      q.includes('optivest') ||
+      q.includes('changewave');
+
+    // Condition 3B: Follow-up to DSA coding stats
+    const wasDsaContext =
+      lastBotText.includes('geeksforgeeks') ||
+      lastBotText.includes('gfg') ||
+      lastBotText.includes('leetcode') ||
+      lastBotText.includes('dsa') ||
+      lastBotText.includes('algorithmic problems');
+
+    const isDsaFollowUp =
+      wasDsaContext &&
+      (q.includes('hard') ||
+        q.includes('medium') ||
+        q.includes('easy') ||
+        q.includes('basic') ||
+        q.includes('score') ||
+        q.includes('rank') ||
+        q.includes('streak') ||
+        q.includes('how many'));
+
+    // Condition 3C: Conversational chaining connectors
+    const isChainingQuery =
+      q.startsWith('and ') ||
+      q.startsWith('what about') ||
+      q.startsWith('how about') ||
+      q.startsWith('who else') ||
+      q.startsWith('which ') ||
+      q.startsWith('show ') ||
+      ((q.includes('proof') || q.includes('certificate') || q.includes('link') || q.includes('demo')) &&
+        (lastBotText.includes('hackathon') || lastBotText.includes('project') || lastBotText.includes('internship')));
+
+    if (
+      (botAskedClarification && (isDirectClarificationAnswer || q.length <= 40)) ||
+      isDsaFollowUp ||
+      isChainingQuery
+    ) {
+      return { duration: 0, isRoastOrSecurity: false, isSequential: true };
+    }
+
+    // 4. Default standard rate limit for everyone -> 20 SECONDS
+    return { duration: 20, isRoastOrSecurity: false, isSequential: false };
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -654,11 +731,9 @@ export default function Chatbot() {
 
       setMessages((prev) => [...prev, botMsg]);
 
-      // Trigger punishment cooldown if inappropriate / roasted / troll
-      const punishment = checkPunishmentTrigger(textToSend, botReply);
-      if (punishment.shouldPunish) {
-        triggerCooldown(punishment.duration);
-      }
+      // Apply cooldown: 120s for troll/illegal, 0s for sequential, 20s for normal
+      const cooldownResult = determineCooldownDuration(textToSend, botReply, messages);
+      triggerCooldown(cooldownResult.duration);
     } catch {
       // Graceful fallback to verified offline answer with memory
       const fallbackReply = getOfflineAnswer(textToSend, [...messages, userMsg]);
@@ -672,10 +747,8 @@ export default function Chatbot() {
         },
       ]);
 
-      const punishment = checkPunishmentTrigger(textToSend, fallbackReply);
-      if (punishment.shouldPunish) {
-        triggerCooldown(punishment.duration);
-      }
+      const cooldownResult = determineCooldownDuration(textToSend, fallbackReply, messages);
+      triggerCooldown(cooldownResult.duration);
     } finally {
       setIsLoading(false);
     }
@@ -756,15 +829,6 @@ export default function Chatbot() {
 
               <div className="flex items-center gap-1">
                 <button
-                  onClick={() => setShowSettings(!showSettings)}
-                  title="Configure Groq AI API Key"
-                  className={`p-1.5 rounded hover:bg-white/5 transition-colors cursor-pointer text-text-tertiary hover:text-text-primary ${
-                    showSettings ? 'text-accent bg-accent/10' : ''
-                  }`}
-                >
-                  <Key className="w-4 h-4" />
-                </button>
-                <button
                   onClick={handleReset}
                   title="Reset conversation"
                   className="p-1.5 rounded hover:bg-white/5 transition-colors cursor-pointer text-text-tertiary hover:text-text-primary"
@@ -780,57 +844,6 @@ export default function Chatbot() {
                 </button>
               </div>
             </div>
-
-            {/* API Key Configuration Drawer */}
-            <AnimatePresence>
-              {showSettings && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  className="border-b border-border bg-bg-secondary/90 p-3.5 space-y-2 text-xs font-mono"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold text-text-primary flex items-center gap-1.5">
-                      <Key className="w-3.5 h-3.5 text-accent" />
-                      Groq API Key (Optional)
-                    </span>
-                    {keySaved && (
-                      <span className="text-[10px] text-emerald flex items-center gap-1">
-                        <Check className="w-3 h-3" /> Saved!
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-[11px] text-text-tertiary leading-normal font-sans">
-                    Leave blank to use the built-in verified portfolio engine, or paste your Groq key (
-                    <a
-                      href="https://console.groq.com/keys"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-accent underline"
-                    >
-                      console.groq.com
-                    </a>
-                    ) for ultra-fast Llama-3.3 intelligence.
-                  </p>
-                  <div className="flex gap-2">
-                    <input
-                      type="password"
-                      value={groqKey}
-                      onChange={(e) => setGroqKey(e.target.value)}
-                      placeholder="gsk_..."
-                      className="flex-1 px-2.5 py-1 rounded bg-bg-card border border-border text-xs font-mono text-text-primary focus:outline-none focus:border-accent"
-                    />
-                    <button
-                      onClick={() => saveKey(groqKey)}
-                      className="px-3 py-1 rounded bg-accent text-bg-primary text-xs font-bold hover:bg-accent-light transition-colors cursor-pointer"
-                    >
-                      Save
-                    </button>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
 
             {/* Quick Suggestion Chips */}
             <div className="px-3 pt-2.5 pb-2 border-b border-border/40 bg-bg-secondary/40 flex gap-1.5 overflow-x-auto no-scrollbar">
@@ -892,31 +905,33 @@ export default function Chatbot() {
                     animate={{ opacity: 1, height: 'auto', y: 0 }}
                     exit={{ opacity: 0, height: 0, y: 5 }}
                     className={`mb-2 px-3 py-1.5 rounded-lg border text-[11px] font-mono flex items-center justify-between ${
-                      cooldown > 10
+                      cooldown > 20
                         ? 'bg-rose-500/15 border-rose-500/40 text-rose-300'
-                        : 'bg-red-500/10 border-red-500/30 text-red-400'
+                        : 'bg-accent/15 border-accent/40 text-accent'
                     }`}
                   >
                     <span className="flex items-center gap-1.5">
                       <Clock
                         className={`w-3.5 h-3.5 animate-spin ${
-                          cooldown > 10 ? 'text-rose-400' : 'text-red-400'
+                          cooldown > 20 ? 'text-rose-400' : 'text-accent'
                         }`}
                       />
                       <span>
-                        {cooldown > 10
-                          ? 'Wild Roast Penalty Active (Double Time) — input locked:'
-                          : 'Penalty cooldown active — input locked:'}
+                        {cooldown > 20
+                          ? 'Security & Roast Penalty (2 Minutes) — locked:'
+                          : 'Rate limit active (API protection) — next message in:'}
                       </span>
                     </span>
                     <span
                       className={`font-bold text-xs px-2 py-0.5 rounded ${
-                        cooldown > 10
+                        cooldown > 20
                           ? 'bg-rose-500/30 text-rose-200'
-                          : 'bg-red-500/20 text-red-300'
+                          : 'bg-accent/25 text-accent-light'
                       }`}
                     >
-                      {cooldown}s
+                      {cooldown > 60
+                        ? `${Math.floor(cooldown / 60)}m ${cooldown % 60}s`
+                        : `${cooldown}s`}
                     </span>
                   </motion.div>
                 )}
@@ -937,9 +952,9 @@ export default function Chatbot() {
                   onKeyDown={handleKeyDown}
                   placeholder={
                     cooldown > 0
-                      ? cooldown > 10
-                        ? `Wild Roast Penalty active... wait ${cooldown}s (Double Time, persists across reload)`
-                        : `Penalty cooldown active... wait ${cooldown}s (persists across reload)`
+                      ? cooldown > 20
+                        ? `Security penalty active... wait ${cooldown > 60 ? `${Math.floor(cooldown / 60)}m ${cooldown % 60}s` : `${cooldown}s`} (persists across reload)`
+                        : `Rate limit active... wait ${cooldown}s (persists across reload)`
                       : 'Ask about hackathons, proof, projects, skills... (Shift+Enter for newline)'
                   }
                   disabled={isLoading || cooldown > 0}
@@ -950,7 +965,13 @@ export default function Chatbot() {
                   disabled={!input.trim() || isLoading || cooldown > 0}
                   className="p-2.5 rounded-lg bg-accent text-bg-primary hover:bg-accent-light active:bg-accent-dark disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer shadow-[0_2px_0_0_#0284c7] flex-shrink-0 mb-0.5"
                   aria-label="Send message"
-                  title={cooldown > 0 ? `Locked for ${cooldown}s` : 'Send message'}
+                  title={
+                    cooldown > 0
+                      ? cooldown > 20
+                        ? `Security penalty locked for ${cooldown}s`
+                        : `Rate limit: wait ${cooldown}s`
+                      : 'Send message'
+                  }
                 >
                   {cooldown > 0 ? (
                     <Clock className="w-4 h-4 text-bg-primary" />
@@ -959,13 +980,6 @@ export default function Chatbot() {
                   )}
                 </button>
               </form>
-              <div className="flex items-center justify-between text-[10px] font-mono text-text-tertiary mt-2 px-1">
-                <span className="flex items-center gap-1">
-                  <ShieldCheck className="w-3 h-3 text-emerald" />
-                  Enter ↵ to send • Shift+Enter for newline
-                </span>
-                <span>Powered by Groq</span>
-              </div>
             </div>
           </motion.div>
         )}

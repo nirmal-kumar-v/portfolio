@@ -66,7 +66,10 @@ RULES & DIRECTIVES:
      • **11th Standard (March 2023)**: **88.5%** (531/600), School 3rd Rank. Proof: [11th Grade Marksheet](/results/11th-result.pdf)
      • **10th Standard (SSLC, May 2022)**: **87.4%** (437/500), School 6th Rank. Proof: [10th Grade Marksheet](/results/10th-result.pdf)
 
-7. CONVERSATIONAL MEMORY FOR PROOFS:
+7. CONVERSATIONAL MEMORY FOR PROOFS & MARKS:
+   - If user asks generally for "marks", "scores", or "academic marks" without specifying the grade or semester:
+     Ask: "Which semester or standard marks would you like to check? (10th, 11th, 12th, or Sem 1–4)"
+     When they reply with standard/semester, answer only that specific result with marksheet link.
    - If user asks for "proof", "show certificate", or "how to verify" WITHOUT specifying the event:
      Ask: "Which accomplishment or event would you like proof for?"
      List suggestions:
@@ -77,7 +80,7 @@ RULES & DIRECTIVES:
      • NPTEL HCI (Elite + Gold, Top 1%)
      • Shaastra 2026 at IIT Madras (7 Events)
      • Academic Marksheets (10th, 11th, 12th, Sem 1, 2, 3, 4)
-   - When the user follows up with just an event name (e.g., "devforge", "tamil mandram", "wele", "mist", "10th", "12th"), CONNECT THE CONTEXT to their proof request and immediately deliver the verified certificate link.
+   - When the user follows up with just an event name (e.g., "devforge", "tamil mandram", "wele", "mist", "10th", "12th"), CONNECT THE CONTEXT to their request and immediately deliver the verified certificate or marksheet link.
 
 8. FORMATTING & READABILITY (CRITICAL):
    - NEVER output raw markdown tables (| col1 | col2 |). Tables break on mobile chat screens.
@@ -372,6 +375,37 @@ export function getOfflineAnswer(query: string, history: ChatMessage[] = []): st
     }
   }
 
+  // 5. Conversational Marks Clarification Follow-ups
+  const wasAskingWhichMarks =
+    lastBotText.includes('which semester') ||
+    lastBotText.includes('which standard') ||
+    lastBotText.includes('10th or 12th') ||
+    lastBotText.includes('standard marks');
+
+  if (wasAskingWhichMarks) {
+    if (q.includes('10th') || q.includes('sslc')) {
+      return "Nirmal scored **87.4%** (437/500) in **10th Standard (SSLC)** at Veera Sivaji Vidhyalaya, securing **School 6th Rank**.\n\nVerified Marksheet: [10th Grade Marksheet](/results/10th-result.pdf)";
+    }
+    if (q.includes('11th')) {
+      return "Nirmal scored **88.5%** (531/600) in **11th Standard** at Veera Sivaji Vidhyalaya, securing **School 3rd Rank**.\n\nVerified Marksheet: [11th Grade Marksheet](/results/11th-result.pdf)";
+    }
+    if (q.includes('12th') || q.includes('hsc')) {
+      return "Nirmal scored **91.33%** (548/600) in **12th Standard (HSC)** at Veera Sivaji Vidhyalaya, securing **School 3rd Rank** and a **100/100 Centum in Computer Science**!\n\nVerified Marksheet: [12th Grade Marksheet](/results/12th-result.pdf)";
+    }
+    if (q.includes('sem 1') || q.includes('semester 1') || q === '1') {
+      return "In **Semester 1** (B.Tech IT, KEC), Nirmal achieved a **GPA of 8.87**.\n\nVerified Result: [Semester 1 Result](/results/semester-1-result.pdf)";
+    }
+    if (q.includes('sem 2') || q.includes('semester 2') || q === '2') {
+      return "In **Semester 2** (B.Tech IT, KEC), Nirmal achieved a **GPA of 8.59** (Cumulative CGPA: 8.73).\n\nVerified Result: [Semester 2 Result](/results/semester-2-result.pdf)";
+    }
+    if (q.includes('sem 3') || q.includes('semester 3') || q === '3') {
+      return "In **Semester 3** (B.Tech IT, KEC), Nirmal achieved a **GPA of 8.50** (Cumulative CGPA: 8.66).\n\nVerified Result: [Semester 3 Result](/results/semester-3-result.pdf)";
+    }
+    if (q.includes('sem 4') || q.includes('semester 4') || q === '4') {
+      return "In **Semester 4** (B.Tech IT, KEC), Nirmal achieved a **GPA of 8.54** (Cumulative CGPA: 8.62).\n\nVerified Result: [Semester 4 Result](/results/semester-4-result.pdf)";
+    }
+  }
+
   // 5. Lively & Exact DSA Inquiries ("Answer only what they ask")
   // Hard problems query
   if (q.includes('hard')) {
@@ -462,8 +496,41 @@ export function getOfflineAnswer(query: string, history: ChatMessage[] = []): st
       "• **Hard Problems Total**: **21 Hard problems** (14 on GFG + 7 on LeetCode)";
   }
 
-  // School inquiry
-  if (q.includes('school') || q.includes('10th') || q.includes('11th') || q.includes('12th') || q.includes('sivaji') || q.includes('veera')) {
+  // Specific Semester inquiries
+  if (q.includes('sem 1') || q.includes('semester 1') || (wasAskingWhichMarks && q === '1')) {
+    return "In **Semester 1** (B.Tech IT, KEC), Nirmal achieved a **GPA of 8.87**.\n\nVerified Result: [Semester 1 Result](/results/semester-1-result.pdf)";
+  }
+  if (q.includes('sem 2') || q.includes('semester 2') || (wasAskingWhichMarks && q === '2')) {
+    return "In **Semester 2** (B.Tech IT, KEC), Nirmal achieved a **GPA of 8.59** (Cumulative CGPA: 8.73).\n\nVerified Result: [Semester 2 Result](/results/semester-2-result.pdf)";
+  }
+  if (q.includes('sem 3') || q.includes('semester 3') || (wasAskingWhichMarks && q === '3')) {
+    return "In **Semester 3** (B.Tech IT, KEC), Nirmal achieved a **GPA of 8.50** (Cumulative CGPA: 8.66).\n\nVerified Result: [Semester 3 Result](/results/semester-3-result.pdf)";
+  }
+  if (q.includes('sem 4') || q.includes('semester 4') || (wasAskingWhichMarks && q === '4')) {
+    return "In **Semester 4** (B.Tech IT, KEC), Nirmal achieved a **GPA of 8.54** (Cumulative CGPA: 8.62).\n\nVerified Result: [Semester 4 Result](/results/semester-4-result.pdf)";
+  }
+
+  // Specific High School Standards
+  if (q.includes('10th') || q.includes('sslc')) {
+    return "Nirmal scored **87.4%** (437/500) in **10th Standard (SSLC)** at Veera Sivaji Vidhyalaya, securing **School 6th Rank**.\n\nVerified Marksheet: [10th Grade Marksheet](/results/10th-result.pdf)";
+  }
+  if (q.includes('11th')) {
+    return "Nirmal scored **88.5%** (531/600) in **11th Standard** at Veera Sivaji Vidhyalaya, securing **School 3rd Rank**.\n\nVerified Marksheet: [11th Grade Marksheet](/results/11th-result.pdf)";
+  }
+  if (q.includes('12th') || q.includes('hsc')) {
+    return "Nirmal scored **91.33%** (548/600) in **12th Standard (HSC)** at Veera Sivaji Vidhyalaya, securing **School 3rd Rank** and a **100/100 Centum in Computer Science**!\n\nVerified Marksheet: [12th Grade Marksheet](/results/12th-result.pdf)";
+  }
+
+  // General marks inquiry (asks for clarification)
+  if (
+    (q.includes('mark') || q.includes('score') || q.includes('grade') || q.includes('percentage') || q.includes('result')) &&
+    !q.includes('coding') && !q.includes('gfg') && !q.includes('leetcode')
+  ) {
+    return "Which semester or standard marks would you like to check? (10th, 11th, 12th, or Sem 1–4)";
+  }
+
+  // School inquiry (general overview)
+  if (q.includes('school') || q.includes('sivaji') || q.includes('veera')) {
     return "Nirmal completed his high school education at **Veera Sivaji Vidhyalaya Matric Hr. Sec. School, Tiruppur**:\n\n" +
       "• **12th Standard (HSC, March 2024)**: **91.33%** (548/600), School 3rd Rank, with a **100/100 Centum in Computer Science**! Proof: [12th Grade Marksheet](/results/12th-result.pdf)\n" +
       "• **11th Standard (March 2023)**: **88.5%** (531/600), School 3rd Rank. Proof: [11th Grade Marksheet](/results/11th-result.pdf)\n" +
