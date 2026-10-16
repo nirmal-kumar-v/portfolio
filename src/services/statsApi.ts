@@ -13,6 +13,10 @@ export interface GeeksforGeeksStats {
   longestStreak: number;
   correctSubmissions: number;
   institute: string;
+  basic?: number;
+  easy?: number;
+  medium?: number;
+  hard?: number;
 }
 
 export interface ProviderStats<T> {
@@ -28,20 +32,24 @@ export interface ProviderStats<T> {
 
 // Baseline records strictly supplied in Nirmal's profile
 export const LEETCODE_BASELINE: LeetCodeStats = {
-  totalSolved: 250,
-  easy: 150,
-  medium: 93,
+  totalSolved: 269,
+  easy: 162,
+  medium: 100,
   hard: 7,
   ranking: 599257,
 };
 
 export const GFG_BASELINE: GeeksforGeeksStats = {
-  totalSolved: 500,
+  totalSolved: 548,
   codingScore: 1505,
   instituteRank: 35,
   longestStreak: 32,
   correctSubmissions: 40,
   institute: 'Kongu Engineering College',
+  basic: 166,
+  easy: 236,
+  medium: 132,
+  hard: 14,
 };
 
 // Client cooldown: minimum 20 seconds between manual retries

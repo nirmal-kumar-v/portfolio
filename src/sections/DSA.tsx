@@ -129,8 +129,8 @@ export default function DSA() {
           >
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
-                <div className="p-3 rounded bg-amber-500/10 border border-amber-500/20 text-amber-400">
-                  <LeetcodeIcon className="w-6 h-6" />
+                <div className="p-3 rounded bg-amber-500/10 border border-amber-500/20">
+                  <LeetcodeIcon className="w-6 h-6" colored />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
@@ -218,8 +218,8 @@ export default function DSA() {
           >
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
-                <div className="p-3 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald">
-                  <GeeksforGeeksIcon className="w-6 h-6" />
+                <div className="p-3 rounded bg-emerald-500/10 border border-emerald-500/20">
+                  <GeeksforGeeksIcon className="w-6 h-6" colored />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
@@ -444,6 +444,91 @@ export default function DSA() {
                     <span>Verify Profile on GFG</span>
                     <ExternalLink className="w-3 h-3 text-emerald" />
                   </a>
+                </div>
+
+                {/* GeeksforGeeks Difficulty Breakdown (School/Basic, Easy, Medium, Hard) */}
+                <div>
+                  <h5 className="text-xs font-mono uppercase tracking-wider text-text-tertiary mb-4">
+                    Difficulty Breakdown (Actually Solved)
+                  </h5>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                    {/* School & Basic */}
+                    <div className="p-4 rounded border border-cyan-500/30 bg-cyan-500/5">
+                      <div className="flex items-center justify-between text-xs font-mono text-cyan-400 mb-1">
+                        <span className="font-semibold">School & Basic</span>
+                        <span>{gfg?.data?.basic ?? 166} Solved</span>
+                      </div>
+                      <div className="w-full bg-bg-secondary h-2 rounded-full overflow-hidden mt-2">
+                        <div
+                          className="bg-cyan-400 h-full transition-all duration-500"
+                          style={{
+                            width: `${Math.min(
+                              100,
+                              Math.round(((gfg?.data?.basic ?? 166) / (gfg?.data?.totalSolved || 548)) * 100)
+                            )}%`,
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Easy */}
+                    <div className="p-4 rounded border border-emerald/30 bg-emerald/5">
+                      <div className="flex items-center justify-between text-xs font-mono text-emerald mb-1">
+                        <span className="font-semibold">Easy</span>
+                        <span>{gfg?.data?.easy ?? 236} Solved</span>
+                      </div>
+                      <div className="w-full bg-bg-secondary h-2 rounded-full overflow-hidden mt-2">
+                        <div
+                          className="bg-emerald h-full transition-all duration-500"
+                          style={{
+                            width: `${Math.min(
+                              100,
+                              Math.round(((gfg?.data?.easy ?? 236) / (gfg?.data?.totalSolved || 548)) * 100)
+                            )}%`,
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Medium */}
+                    <div className="p-4 rounded border border-amber-500/30 bg-amber-500/5">
+                      <div className="flex items-center justify-between text-xs font-mono text-amber-400 mb-1">
+                        <span className="font-semibold">Medium</span>
+                        <span>{gfg?.data?.medium ?? 132} Solved</span>
+                      </div>
+                      <div className="w-full bg-bg-secondary h-2 rounded-full overflow-hidden mt-2">
+                        <div
+                          className="bg-amber-400 h-full transition-all duration-500"
+                          style={{
+                            width: `${Math.min(
+                              100,
+                              Math.round(((gfg?.data?.medium ?? 132) / (gfg?.data?.totalSolved || 548)) * 100)
+                            )}%`,
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Hard */}
+                    <div className="p-4 rounded border border-rose-500/30 bg-rose-500/5">
+                      <div className="flex items-center justify-between text-xs font-mono text-rose-400 mb-1">
+                        <span className="font-semibold">Hard</span>
+                        <span>{gfg?.data?.hard ?? 14} Solved</span>
+                      </div>
+                      <div className="w-full bg-bg-secondary h-2 rounded-full overflow-hidden mt-2">
+                        <div
+                          className="bg-rose-400 h-full transition-all duration-500"
+                          style={{
+                            width: `${Math.min(
+                              100,
+                              Math.round(((gfg?.data?.hard ?? 14) / (gfg?.data?.totalSolved || 548)) * 100)
+                            )}%`,
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Metrics Grid */}

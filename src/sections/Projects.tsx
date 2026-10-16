@@ -21,6 +21,7 @@ import {
   moreProjects,
   type Project,
   type MoreProjectItem,
+  type TeamMember,
 } from '../data/projects';
 
 function FeaturedCard({
@@ -331,22 +332,41 @@ export default function Projects() {
               </div>
             )}
 
-            {/* Team Members */}
-            {selectedProject.team && selectedProject.team.length > 0 && (
+            {/* Project Team & Contributors */}
+            {((selectedProject.teamMembers && selectedProject.teamMembers.length > 0) ||
+              (selectedProject.team && selectedProject.team.length > 0)) && (
               <div>
-                <h4 className="text-xs font-mono uppercase tracking-wider text-accent font-semibold mb-2">
-                  Project Team
+                <h4 className="text-xs font-mono uppercase tracking-wider text-accent font-semibold mb-2.5 flex items-center gap-2">
+                  <Users className="w-3.5 h-3.5 text-accent" />
+                  <span>Project Team & Contributors</span>
                 </h4>
                 <div className="flex flex-wrap gap-2">
-                  {selectedProject.team.map((m) => (
-                    <span
-                      key={m}
-                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-bg-card border border-border text-xs text-text-secondary font-mono"
-                    >
-                      <Users className="w-3 h-3 text-accent" />
-                      <span>{m}</span>
-                    </span>
-                  ))}
+                  {(selectedProject.teamMembers || (selectedProject.team ? selectedProject.team.map((m): TeamMember => ({ name: m })) : [])).map((member) =>
+                    member.githubUrl ? (
+                      <a
+                        key={member.name}
+                        href={member.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title={`View ${member.name} on GitHub (${member.githubUrl})`}
+                        className="group inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-bg-card border border-border text-xs text-text-secondary font-mono hover:border-accent hover:bg-accent/10 hover:text-accent-light transition-all select-none cursor-pointer shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-[0.98]"
+                      >
+                        <GithubIcon className="w-3.5 h-3.5 text-text-tertiary group-hover:text-accent transition-colors" />
+                        <span className="font-medium text-text-primary group-hover:text-accent-light transition-colors">
+                          {member.name}
+                        </span>
+                        <ExternalLink className="w-3 h-3 text-text-tertiary/60 group-hover:text-accent group-hover:translate-x-0.5 transition-all" />
+                      </a>
+                    ) : (
+                      <span
+                        key={member.name}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-bg-card/70 border border-border/80 text-xs text-text-secondary font-mono select-none"
+                      >
+                        <Users className="w-3.5 h-3.5 text-text-tertiary" />
+                        <span>{member.name}</span>
+                      </span>
+                    )
+                  )}
                 </div>
               </div>
             )}
@@ -422,20 +442,41 @@ export default function Projects() {
               </div>
             )}
 
-            {selectedMoreProject.team && (
+            {/* Team & Contributors */}
+            {((selectedMoreProject.teamMembers && selectedMoreProject.teamMembers.length > 0) ||
+              (selectedMoreProject.team && selectedMoreProject.team.length > 0)) && (
               <div>
-                <h4 className="text-xs font-mono uppercase tracking-wider text-accent font-semibold mb-2">
-                  Team
+                <h4 className="text-xs font-mono uppercase tracking-wider text-accent font-semibold mb-2.5 flex items-center gap-2">
+                  <Users className="w-3.5 h-3.5 text-accent" />
+                  <span>Team & Contributors</span>
                 </h4>
                 <div className="flex flex-wrap gap-2">
-                  {selectedMoreProject.team.map((m) => (
-                    <span
-                      key={m}
-                      className="px-2.5 py-1 rounded bg-bg-card border border-border text-xs text-text-secondary font-mono"
-                    >
-                      {m}
-                    </span>
-                  ))}
+                  {(selectedMoreProject.teamMembers || (selectedMoreProject.team ? selectedMoreProject.team.map((m): TeamMember => ({ name: m })) : [])).map((member) =>
+                    member.githubUrl ? (
+                      <a
+                        key={member.name}
+                        href={member.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title={`View ${member.name} on GitHub (${member.githubUrl})`}
+                        className="group inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-bg-card border border-border text-xs text-text-secondary font-mono hover:border-accent hover:bg-accent/10 hover:text-accent-light transition-all select-none cursor-pointer shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-[0.98]"
+                      >
+                        <GithubIcon className="w-3.5 h-3.5 text-text-tertiary group-hover:text-accent transition-colors" />
+                        <span className="font-medium text-text-primary group-hover:text-accent-light transition-colors">
+                          {member.name}
+                        </span>
+                        <ExternalLink className="w-3 h-3 text-text-tertiary/60 group-hover:text-accent group-hover:translate-x-0.5 transition-all" />
+                      </a>
+                    ) : (
+                      <span
+                        key={member.name}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-bg-card/70 border border-border/80 text-xs text-text-secondary font-mono select-none"
+                      >
+                        <Users className="w-3.5 h-3.5 text-text-tertiary" />
+                        <span>{member.name}</span>
+                      </span>
+                    )
+                  )}
                 </div>
               </div>
             )}

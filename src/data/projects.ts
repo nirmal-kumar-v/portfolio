@@ -1,3 +1,13 @@
+export interface ProjectContributor {
+  name: string;
+  githubUrl: string;
+}
+
+export interface TeamMember {
+  name: string;
+  githubUrl?: string;
+}
+
 export interface Project {
   id: string;
   name: string;
@@ -13,6 +23,8 @@ export interface Project {
   technologies: string[];
   responsibilities?: string[];
   team?: string[];
+  contributors?: ProjectContributor[];
+  teamMembers?: TeamMember[];
   achievement?: string;
   awardBadge?: string;
   githubUrl?: string;
@@ -49,6 +61,17 @@ export const featuredProjects: Project[] = [
       'Deployed the live production web portal on Vercel',
     ],
     team: ['Nirmal Kumar V. (Team Lead)', 'Ranjith K.', 'Mohamad Shameer'],
+    contributors: [
+      {
+        name: 'Ranjith Kumaravel',
+        githubUrl: 'https://github.com/Ranjith-kumaravel',
+      },
+    ],
+    teamMembers: [
+      { name: 'Nirmal Kumar V. (Team Lead)', githubUrl: 'https://github.com/nirmal-kumar-v' },
+      { name: 'Ranjith Kumaravel', githubUrl: 'https://github.com/Ranjith-kumaravel' },
+      { name: 'Mohamad Shameer' },
+    ],
     achievement: '1st Prize — Tamil Mandram 24-Hour Hackathon',
     awardBadge: '1st Prize · Tamil Mandram 24H',
     demoUrl: 'https://kongu-kural.vercel.app',
@@ -89,6 +112,26 @@ export const featuredProjects: Project[] = [
       'Lokgesh B.',
       'Rishi Priyan G.',
     ],
+    contributors: [
+      {
+        name: 'Praveenkarthick M',
+        githubUrl: 'https://github.com/Prave147',
+      },
+      {
+        name: 'Rishi Priyan G',
+        githubUrl: 'https://github.com/rishipriyan-g28',
+      },
+      {
+        name: 'Lokgesh B',
+        githubUrl: 'https://github.com/B-Lokgesh',
+      },
+    ],
+    teamMembers: [
+      { name: 'Nirmal Kumar V. (Team Lead)', githubUrl: 'https://github.com/nirmal-kumar-v' },
+      { name: 'Praveenkarthick M', githubUrl: 'https://github.com/Prave147' },
+      { name: 'Lokgesh B', githubUrl: 'https://github.com/B-Lokgesh' },
+      { name: 'Rishi Priyan G', githubUrl: 'https://github.com/rishipriyan-g28' },
+    ],
     achievement: '1st Place — DevForge 2K26 24-Hour Hackathon',
     awardBadge: '1st Place · DevForge 2K26 24H',
     githubUrl: 'https://github.com/nirmal-kumar-v/Store-Management-System',
@@ -126,6 +169,26 @@ export const featuredProjects: Project[] = [
       'Nithish S.',
       'Niranjan G.',
       'Pranesh D.',
+    ],
+    contributors: [
+      {
+        name: 'Nithish S',
+        githubUrl: 'https://github.com/NITHISH-2207',
+      },
+      {
+        name: 'Niranjan G',
+        githubUrl: 'https://github.com/Niranjan-g-13012007',
+      },
+      {
+        name: 'Pranesh Deepan',
+        githubUrl: 'https://github.com/pranesh-deepan',
+      },
+    ],
+    teamMembers: [
+      { name: 'Nirmal Kumar V. (Team Lead)', githubUrl: 'https://github.com/nirmal-kumar-v' },
+      { name: 'Nithish S', githubUrl: 'https://github.com/NITHISH-2207' },
+      { name: 'Niranjan G', githubUrl: 'https://github.com/Niranjan-g-13012007' },
+      { name: 'Pranesh Deepan', githubUrl: 'https://github.com/pranesh-deepan' },
     ],
     achievement: '1st Prize — Centre of Excellence (CoE) Hackathon',
     awardBadge: '1st Prize · CoE Hackathon',
@@ -165,6 +228,19 @@ export const featuredProjects: Project[] = [
       'Red Ribbon Club: Nirmal Kumar V. (Team Member), Prathish S., Arnald S.',
       'CSI Team Presentation: Nirmal Kumar V. (Team Lead), Rajamurugan, Pon Yogesh S.',
     ],
+    contributors: [
+      {
+        name: 'Prathish S',
+        githubUrl: 'https://github.com/prathish-s007',
+      },
+    ],
+    teamMembers: [
+      { name: 'Nirmal Kumar V.', githubUrl: 'https://github.com/nirmal-kumar-v' },
+      { name: 'Prathish S', githubUrl: 'https://github.com/prathish-s007' },
+      { name: 'Arnald S' },
+      { name: 'Rajamurugan' },
+      { name: 'Pon Yogesh S' },
+    ],
     achievement:
       '1st Place (Red Ribbon Club Hackathon) • 2nd Place (CSI Solo Presentation) • 2nd Place (CSI Team Presentation)',
     awardBadge: '1st Place · RRC | 2× 2nd · CSI',
@@ -201,6 +277,32 @@ export const featuredProjects: Project[] = [
     team: [
       'KPR College Presentation: Nirmal Kumar V. (Team Lead), Praveenkarthick M.',
       'VIT Data Quest 3.0: Nirmal Kumar V. (Lead), Praveenkarthick M., Navaneethan S., Lokgesh B., Praveen Kumar, Nisanth K.',
+    ],
+    contributors: [
+      {
+        name: 'Praveenkarthick M',
+        githubUrl: 'https://github.com/Prave147',
+      },
+      {
+        name: 'Navaneethan RS',
+        githubUrl: 'https://github.com/Navaneethanrs',
+      },
+      {
+        name: 'Lokgesh B',
+        githubUrl: 'https://github.com/B-Lokgesh',
+      },
+      {
+        name: 'Nisanth K',
+        githubUrl: 'https://github.com/Nisanth1975',
+      },
+    ],
+    teamMembers: [
+      { name: 'Nirmal Kumar V. (Team Lead)', githubUrl: 'https://github.com/nirmal-kumar-v' },
+      { name: 'Praveenkarthick M', githubUrl: 'https://github.com/Prave147' },
+      { name: 'Navaneethan RS', githubUrl: 'https://github.com/Navaneethanrs' },
+      { name: 'Lokgesh B', githubUrl: 'https://github.com/B-Lokgesh' },
+      { name: 'Nisanth K', githubUrl: 'https://github.com/Nisanth1975' },
+      { name: 'Praveen Kumar' },
     ],
     achievement: '2nd Prize — KPR College Project Presentation',
     awardBadge: '2nd Prize · KPR Presentation',
@@ -242,6 +344,28 @@ export const featuredProjects: Project[] = [
       'Vishali',
       'Prathisha',
     ],
+    contributors: [
+      {
+        name: 'Nithish Kumar T S',
+        githubUrl: 'https://github.com/nithixh',
+      },
+      {
+        name: 'Nithish S',
+        githubUrl: 'https://github.com/NITHISH-2207',
+      },
+      {
+        name: 'Loganath R K',
+        githubUrl: 'https://github.com/LoganathRK',
+      },
+    ],
+    teamMembers: [
+      { name: 'Nirmal Kumar V. (Team Lead)', githubUrl: 'https://github.com/nirmal-kumar-v' },
+      { name: 'Nithish Kumar T S', githubUrl: 'https://github.com/nithixh' },
+      { name: 'Nithish S', githubUrl: 'https://github.com/NITHISH-2207' },
+      { name: 'Loganath R K', githubUrl: 'https://github.com/LoganathRK' },
+      { name: 'Vishali' },
+      { name: 'Prathisha' },
+    ],
     achievement: 'Institutional Project Development (Internal College Review)',
     awardBadge: 'SIH 2026 Internal Review',
     demoUrl: 'https://setu-connect.vercel.app/',
@@ -258,6 +382,8 @@ export interface MoreProjectItem {
   role: string;
   description: string;
   team?: string[];
+  contributors?: ProjectContributor[];
+  teamMembers?: TeamMember[];
   achievement?: string;
   technologies?: string[];
   githubUrl?: string;
@@ -273,6 +399,18 @@ export const moreProjects: MoreProjectItem[] = [
     description:
       'A college-focused bilingual information chatbot supporting Tamil and English conversational interfaces to answer campus queries.',
     team: ['Nirmal Kumar V. (Lead)', 'Prathish S.', 'Nishanth KV', 'Ponyoshesh S.'],
+    contributors: [
+      {
+        name: 'Prathish S',
+        githubUrl: 'https://github.com/prathish-s007',
+      },
+    ],
+    teamMembers: [
+      { name: 'Nirmal Kumar V. (Lead)', githubUrl: 'https://github.com/nirmal-kumar-v' },
+      { name: 'Prathish S', githubUrl: 'https://github.com/prathish-s007' },
+      { name: 'Nishanth KV' },
+      { name: 'Ponyoshesh S' },
+    ],
     achievement: '2nd Place — Tamil Mandram 8-Hour Hackathon',
     technologies: ['HTML', 'CSS', 'JavaScript', 'Node.js'],
   },
@@ -302,6 +440,11 @@ export const moreProjects: MoreProjectItem[] = [
     description:
       'An academic discussion platform developed during the 3rd Semester Design Thinking Laboratory that achieved an O Grade. Explores course-code-based discussion spaces and student-staff interaction.',
     team: ['Nirmal Kumar V.', 'Nishanth KV', 'Nathish'],
+    teamMembers: [
+      { name: 'Nirmal Kumar V.', githubUrl: 'https://github.com/nirmal-kumar-v' },
+      { name: 'Nishanth KV' },
+      { name: 'Nathish' },
+    ],
     achievement: 'O Grade — 3rd Semester Design Thinking Lab',
     technologies: ['HTML', 'CSS', 'JavaScript', 'Node.js', 'MongoDB'],
     githubUrl: 'https://github.com/nirmal-kumar-v/ccc',
@@ -315,6 +458,11 @@ export const moreProjects: MoreProjectItem[] = [
     description:
       'A civic issue-reporting platform concept created for municipal water distribution tracking. Achieved an O Grade in 3rd Semester mini-project review.',
     team: ['Nirmal Kumar V.', 'Narmatha G.', 'Lavanya'],
+    teamMembers: [
+      { name: 'Nirmal Kumar V.', githubUrl: 'https://github.com/nirmal-kumar-v' },
+      { name: 'Narmatha G.' },
+      { name: 'Lavanya' },
+    ],
     achievement: 'O Grade — 3rd Semester Mini Project',
     technologies: ['JavaScript', 'Node.js', 'HTML/CSS', 'MongoDB'],
     githubUrl: 'https://github.com/nirmal-kumar-v/perundurai-water-issue-reporting-system',
@@ -332,6 +480,18 @@ export const moreProjects: MoreProjectItem[] = [
       'Prathish (Frontend, Dashboard & API)',
       'Sudharson (Hardware)',
       'Vaseegaran (Battery Research & Testing)',
+    ],
+    contributors: [
+      {
+        name: 'Prathish S',
+        githubUrl: 'https://github.com/prathish-s007',
+      },
+    ],
+    teamMembers: [
+      { name: 'Nirmal Kumar V. (IT Lead)', githubUrl: 'https://github.com/nirmal-kumar-v' },
+      { name: 'Prathish S', githubUrl: 'https://github.com/prathish-s007' },
+      { name: 'Sudharson' },
+      { name: 'Vaseegaran' },
     ],
     technologies: ['Python', 'Node.js', 'IoT Telemetry', 'Database Integration'],
   },

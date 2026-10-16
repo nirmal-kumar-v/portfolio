@@ -66,7 +66,7 @@ export const schoolEducation = [
 
 export const socialLinks = {
   github: 'https://github.com/nirmal-kumar-v',
-  linkedin: 'https://www.linkedin.com/in/nirmal-kumar-v/',
+  linkedin: 'https://www.linkedin.com/in/nirmal-kumar-v-',
   leetcode: 'https://leetcode.com/u/nirmal-kumar-v/',
   geeksforgeeks: 'https://www.geeksforgeeks.org/profile/nirmalkumar33',
   codeforces: 'https://codeforces.com/profile/nirmal_kumar_v',

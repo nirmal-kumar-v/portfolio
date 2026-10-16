@@ -92,6 +92,10 @@ export default async function handler(req, res) {
         longestStreak,
         correctSubmissions,
         institute: 'Kongu Engineering College',
+        basic: 166,
+        easy: 236,
+        medium: 132,
+        hard: 14,
       },
     };
 
@@ -113,9 +117,13 @@ export default async function handler(req, res) {
       isLive: false,
       message: err.message || 'Failed to fetch GeeksforGeeks statistics',
       fallback: {
-        totalSolved: 500, // labelled baseline
-        codingScore: 1500,
+        totalSolved: 548, // labelled baseline
+        codingScore: 1505,
         instituteRank: 35,
+        basic: 166,
+        easy: 236,
+        medium: 132,
+        hard: 14,
         label: 'Baseline profile records (fetch unavailable)',
       },
       lastAttempt: new Date().toISOString(),
