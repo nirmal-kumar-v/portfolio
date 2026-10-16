@@ -41,6 +41,36 @@ function apiDevServerPlugin(): Plugin {
             return handler(req, res);
           } catch (err: any) {
             res.statusCode = 500;
+            return;
+          }
+        }
+        if (url === '/api/chat') {
+          try {
+            let bodyStr = '';
+            req.on('data', (chunk) => {
+              bodyStr += chunk;
+            });
+            req.on('end', async () => {
+              try {
+                (req as any).body = bodyStr ? JSON.parse(bodyStr) : {};
+              } catch {
+                (req as any).body = {};
+              }
+              const { default: handler } = await import('./api/chat.js');
+              (res as any).json = (data: any) => {
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify(data));
+              };
+              (res as any).status = (code: number) => {
+                res.statusCode = code;
+                return res;
+              };
+              await handler(req, res);
+            });
+            return;
+          } catch (err: any) {
+            res.statusCode = 500;
+            res.setHeader('Content-Type', 'application/json');
             res.end(JSON.stringify({ error: err.message }));
             return;
           }

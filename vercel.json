@@ -12,6 +12,10 @@
       "destination": "/api/geeksforgeeks.js"
     },
     {
+      "source": "/api/chat",
+      "destination": "/api/chat.js"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
