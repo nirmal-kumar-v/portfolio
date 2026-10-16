@@ -133,8 +133,8 @@ export async function fetchGeeksforGeeksStats(force = false): Promise<ProviderSt
     }
   }
 
-  const username = 'nirmalkumar33';
-  const profileUrl = 'https://www.geeksforgeeks.org/profile/nirmalkumar33';
+  const username = 'vnirmalkumar';
+  const profileUrl = 'https://www.geeksforgeeks.org/profile/vnirmalkumar';
 
   try {
     const res = await fetch('/api/geeksforgeeks', {

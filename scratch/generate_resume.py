@@ -152,7 +152,7 @@ def build_pdf(output_path):
         '<a href="https://github.com/nirmal-kumar-v" color="#0369A1"><b>GitHub</b>: github.com/nirmal-kumar-v</a> &nbsp;&bull;&nbsp; '
         '<a href="https://www.linkedin.com/in/nirmal-kumar-v/" color="#0369A1"><b>LinkedIn</b>: linkedin.com/in/nirmal-kumar-v-</a><br/>'
         '<a href="https://leetcode.com/u/nirmal-kumar-v/" color="#0369A1"><b>LeetCode</b>: @nirmal-kumar-v</a> &nbsp;&bull;&nbsp; '
-        '<a href="https://www.geeksforgeeks.org/profile/nirmalkumar33" color="#0369A1"><b>GeeksforGeeks</b>: @nirmalkumar33</a> &nbsp;&bull;&nbsp; '
+        '<a href="https://www.geeksforgeeks.org/profile/vnirmalkumar" color="#0369A1"><b>GeeksforGeeks</b>: @vnirmalkumar</a> &nbsp;&bull;&nbsp; '
         '<a href="https://codeforces.com/profile/nirmal_kumar_v" color="#0369A1"><b>Codeforces</b>: @nirmal_kumar_v</a>'
     )
     story.append(Paragraph(contact_text, contact_style))
@@ -208,7 +208,7 @@ def build_pdf(output_path):
     add_section_header("Problem Solving & Competitive Programming")
     cp_text = (
         "• <b>LeetCode:</b> <a href='https://leetcode.com/u/nirmal-kumar-v/' color='#0369A1'><b>250+ Problems Solved</b></a> across Data Structures, Dynamic Programming, and Graph Algorithms.<br/>"
-        "• <b>GeeksforGeeks:</b> <a href='https://www.geeksforgeeks.org/profile/nirmalkumar33' color='#0369A1'><b>500+ Problems Solved</b></a> (Coding Score: 1,500+; Institute Rank: 35; Longest Streak: 32).<br/>"
+        "• <b>GeeksforGeeks:</b> <a href='https://www.geeksforgeeks.org/profile/vnirmalkumar' color='#0369A1'><b>500+ Problems Solved</b></a> (Coding Score: 1,500+; Institute Rank: 35; Longest Streak: 32).<br/>"
         "• <b>Elite PAAC Training:</b> Selected among the <b>top ~4%</b> (80 students out of 2,000+ candidates considered) for specialized DSA and Competitive Programming training conducted directly by GeeksforGeeks mentors."
     )
     story.append(Paragraph(cp_text, body_style))
@@ -426,7 +426,7 @@ def build_docx(output_path):
     p_con3.paragraph_format.space_after = Pt(5)
     add_hyperlink(p_con3, "https://leetcode.com/u/nirmal-kumar-v/", "LeetCode: @nirmal-kumar-v")
     p_con3.add_run("  •  ")
-    add_hyperlink(p_con3, "https://www.geeksforgeeks.org/profile/nirmalkumar33", "GeeksforGeeks: @nirmalkumar33")
+    add_hyperlink(p_con3, "https://www.geeksforgeeks.org/profile/vnirmalkumar", "GeeksforGeeks: @vnirmalkumar")
     p_con3.add_run("  •  ")
     add_hyperlink(p_con3, "https://codeforces.com/profile/nirmal_kumar_v", "Codeforces: @nirmal_kumar_v")
 

@@ -100,6 +100,6 @@ The project is fully configured for Vercel deployment with `vercel.json`:
 | Platform | Username | Data Source | Metrics Extracted |
 | :--- | :--- | :--- | :--- |
 | **LeetCode** | `nirmal-kumar-v` | Public GraphQL (`https://leetcode.com/graphql`) | Total Solved (269), Easy (162), Medium (100), Hard (7), Global Rank (599,257) |
-| **GeeksforGeeks** | `nirmalkumar33` | Public Profile RSC Payload (`https://www.geeksforgeeks.org/profile/nirmalkumar33`) | Total Solved (548), Overall Score (1505), Institute Rank (35), Longest POD Streak (32), Correct Submissions (40) |
+| **GeeksforGeeks** | `vnirmalkumar` | Public Profile RSC Payload (`https://www.geeksforgeeks.org/profile/vnirmalkumar`) | Total Solved (548), Overall Score (1505), Institute Rank (35), Longest POD Streak (32), Correct Submissions (40) |
 
 *Both adapters feature a 5-minute server cache, 5–7 second timeout guards, and graceful fallbacks to Nirmal's verified profile baseline (250+ LeetCode, 500+ GFG) if external network connectivity fails.*

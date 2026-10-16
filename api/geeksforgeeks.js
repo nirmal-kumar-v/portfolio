@@ -29,7 +29,7 @@ export default async function handler(req, res) {
     return cache.data;
   }
 
-  const username = 'nirmalkumar33';
+  const username = 'vnirmalkumar';
 
   try {
     const controller = new AbortController();
@@ -82,7 +82,7 @@ export default async function handler(req, res) {
       status: 'success',
       provider: 'geeksforgeeks',
       username,
-      profileUrl: 'https://www.geeksforgeeks.org/profile/nirmalkumar33',
+      profileUrl: 'https://www.geeksforgeeks.org/profile/vnirmalkumar',
       isLive: true,
       lastFetched: new Date().toISOString(),
       data: {
@@ -113,7 +113,7 @@ export default async function handler(req, res) {
       status: 'error',
       provider: 'geeksforgeeks',
       username,
-      profileUrl: 'https://www.geeksforgeeks.org/profile/nirmalkumar33',
+      profileUrl: 'https://www.geeksforgeeks.org/profile/vnirmalkumar',
       isLive: false,
       message: err.message || 'Failed to fetch GeeksforGeeks statistics',
       fallback: {

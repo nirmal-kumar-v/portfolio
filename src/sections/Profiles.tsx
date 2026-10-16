@@ -68,7 +68,7 @@ export default function Profiles() {
       id: 'geeksforgeeks',
       name: 'GeeksforGeeks',
       category: 'Competitive Coding',
-      username: 'nirmalkumar33',
+      username: 'vnirmalkumar',
       url: socialLinks.geeksforgeeks,
       icon: <GeeksforGeeksIcon className="w-6 h-6" colored />,
       accentColor: 'from-emerald-500/20 to-teal-500/5',

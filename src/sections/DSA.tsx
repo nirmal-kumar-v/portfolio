@@ -224,7 +224,7 @@ export default function DSA() {
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
                     <h3 className="text-xl font-bold text-text-primary">GeeksforGeeks</h3>
-                    <span className="text-xs font-mono text-text-tertiary">@nirmalkumar33</span>
+                    <span className="text-xs font-mono text-text-tertiary">@vnirmalkumar</span>
                   </div>
                   <div className="flex items-center gap-2 mt-1">
                     {loadingGfg ? (

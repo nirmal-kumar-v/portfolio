@@ -88,7 +88,7 @@ export const socialLinks = {
   github: 'https://github.com/nirmal-kumar-v',
   linkedin: 'https://www.linkedin.com/in/nirmal-kumar-v-',
   leetcode: 'https://leetcode.com/u/nirmal-kumar-v/',
-  geeksforgeeks: 'https://www.geeksforgeeks.org/profile/nirmalkumar33',
+  geeksforgeeks: 'https://www.geeksforgeeks.org/profile/vnirmalkumar',
   codeforces: 'https://codeforces.com/profile/nirmal_kumar_v',
   codechef: 'https://www.codechef.com/users/nirmal_kumar_v',
   hackerrank: 'https://hackerrank.com/nirmalkumar_v',

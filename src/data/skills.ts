@@ -146,10 +146,10 @@ export const trainingExperiences: TrainingExperienceItem[] = [
     type: 'Opportunity Selection',
     badge: 'Selected / Offered',
     description:
-      'Earned an internship offer following competitive performance at the VIT Data Quest 3.0 hackathon.',
+      'Earned an internship offer for top performance at the VIT Data Quest 3.0 hackathon, competing among 500+ participants.',
     details: [
-      'Selected for an internship opportunity at WeLe (https://wele.ai/) following VIT Data Quest 3.0',
-      'Reported context: 5 internship selections from over 500 participants',
+      'Selected for an internship opportunity at WeLe (https://wele.ai/) for best performance at the VIT Data Quest 3.0 hackathon',
+      'Competed among 500+ participants across institutions (~450 VIT students, alongside SRM and IIT contenders); one of only 5 selected for an offer',
       'Status: Offered/selected (not labeled as completed)',
     ],
     certificateUrl: '/certificates/wele-internship-certificate.jpg',
