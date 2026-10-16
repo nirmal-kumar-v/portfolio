@@ -77,19 +77,38 @@ export default function Education() {
                   Semester Results (Official Records)
                 </span>
                 <div className="grid grid-cols-4 gap-2 text-center">
-                  {semesterGrades.map((sem) => (
-                    <div key={sem.semester} className="p-2 rounded bg-bg-secondary border border-border">
-                      <span className="text-[10px] font-mono text-text-tertiary block truncate">
-                        {sem.semester.replace('Semester ', 'Sem ')}
-                      </span>
-                      <span className="text-sm font-mono font-bold text-text-primary block mt-1">
-                        {sem.gpa.toFixed(2)}
-                      </span>
-                      <span className="text-[9px] font-mono text-accent-light block mt-0.5">
-                        CGPA {sem.cgpa.toFixed(2)}
-                      </span>
-                    </div>
-                  ))}
+                  {semesterGrades.map((sem) => {
+                    const content = (
+                      <>
+                        <span className="text-[10px] font-mono text-text-tertiary group-hover:text-text-secondary transition-colors block truncate">
+                          {sem.semester.replace('Semester ', 'Sem ')}
+                        </span>
+                        <span className="text-sm font-mono font-bold text-text-primary group-hover:text-accent-light transition-colors block mt-1">
+                          {sem.gpa.toFixed(2)}
+                        </span>
+                        <span className="text-[9px] font-mono text-accent-light block mt-0.5">
+                          CGPA {sem.cgpa.toFixed(2)}
+                        </span>
+                      </>
+                    );
+
+                    return sem.pdfUrl ? (
+                      <a
+                        key={sem.semester}
+                        href={sem.pdfUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title={`Open ${sem.semester} result in new tab`}
+                        className="p-2 rounded bg-bg-secondary border border-border hover:border-accent/60 hover:bg-bg-card-hover transition-all duration-200 cursor-pointer block group"
+                      >
+                        {content}
+                      </a>
+                    ) : (
+                      <div key={sem.semester} className="p-2 rounded bg-bg-secondary border border-border">
+                        {content}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -122,23 +141,44 @@ export default function Education() {
                           Veera Sivaji Vidhyalaya Matric Hr. Sec. School, Tiruppur
                         </span>
                         <div className="mt-2 space-y-2 font-mono">
-                          {schoolEducation.map((sch) => (
-                            <div key={sch.grade} className="p-2 rounded bg-bg-card border border-border/60">
-                              <div className="flex items-center justify-between text-text-primary text-[11px] font-semibold">
-                                <span>{sch.grade}</span>
-                                <span className="text-accent">{sch.percentage}</span>
-                              </div>
-                              <div className="flex items-center justify-between text-[10px] text-text-tertiary mt-1">
-                                <span>{sch.year} ({sch.marks})</span>
-                                <span>{sch.rank}</span>
-                              </div>
-                              {sch.note && (
-                                <div className="mt-1 text-[10px] text-gold font-bold">
-                                  ★ {sch.note}
+                          {schoolEducation.map((sch) => {
+                            const content = (
+                              <>
+                                <div className="flex items-center justify-between text-text-primary text-[11px] font-semibold">
+                                  <span className={sch.pdfUrl ? "group-hover:text-accent-light transition-colors" : ""}>
+                                    {sch.grade}
+                                  </span>
+                                  <span className="text-accent">{sch.percentage}</span>
                                 </div>
-                              )}
-                            </div>
-                          ))}
+                                <div className="flex items-center justify-between text-[10px] text-text-tertiary mt-1">
+                                  <span>{sch.year} ({sch.marks})</span>
+                                  <span>{sch.rank}</span>
+                                </div>
+                                {sch.note && (
+                                  <div className="mt-1 text-[10px] text-gold font-bold">
+                                    ★ {sch.note}
+                                  </div>
+                                )}
+                              </>
+                            );
+
+                            return sch.pdfUrl ? (
+                              <a
+                                key={sch.grade}
+                                href={sch.pdfUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                title={`Open ${sch.grade} result in new tab`}
+                                className="p-2 rounded bg-bg-card border border-border/60 hover:border-accent/60 hover:bg-bg-card-hover transition-all duration-200 cursor-pointer block group"
+                              >
+                                {content}
+                              </a>
+                            ) : (
+                              <div key={sch.grade} className="p-2 rounded bg-bg-card border border-border/60">
+                                {content}
+                              </div>
+                            );
+                          })}
                         </div>
                       </div>
                     </motion.div>

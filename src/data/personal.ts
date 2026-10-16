@@ -32,14 +32,31 @@ export const heroStats = [
   { value: 4, label: 'Elite PAAC Selection', suffix: '%', decimals: 0 },
 ];
 
-export const semesterGrades = [
-  { semester: 'Semester 1', gpa: 8.87, cgpa: 8.87 },
-  { semester: 'Semester 2', gpa: 8.59, cgpa: 8.73 },
-  { semester: 'Semester 3', gpa: 8.50, cgpa: 8.66 },
-  { semester: 'Semester 4', gpa: 8.54, cgpa: 8.62 },
+export interface SemesterGrade {
+  semester: string;
+  gpa: number;
+  cgpa: number;
+  pdfUrl?: string;
+}
+
+export const semesterGrades: SemesterGrade[] = [
+  { semester: 'Semester 1', gpa: 8.87, cgpa: 8.87, pdfUrl: '/results/semester-1-result.pdf' },
+  { semester: 'Semester 2', gpa: 8.59, cgpa: 8.73, pdfUrl: '/results/semester-2-result.pdf' },
+  { semester: 'Semester 3', gpa: 8.50, cgpa: 8.66, pdfUrl: '/results/semester-3-result.pdf' },
+  { semester: 'Semester 4', gpa: 8.54, cgpa: 8.62, pdfUrl: '/results/semester-4-result.pdf' },
 ];
 
-export const schoolEducation = [
+export interface SchoolEducationItem {
+  grade: string;
+  year: string;
+  marks: string;
+  percentage: string;
+  rank: string;
+  note?: string;
+  pdfUrl?: string;
+}
+
+export const schoolEducation: SchoolEducationItem[] = [
   {
     grade: '12th Standard (HSC)',
     year: 'March 2024',
@@ -47,6 +64,7 @@ export const schoolEducation = [
     percentage: '91.33%',
     rank: '3rd Rank',
     note: 'Class 12 Computer Science: 100/100',
+    pdfUrl: '/results/12th-result.pdf',
   },
   {
     grade: '11th Standard',
@@ -54,6 +72,7 @@ export const schoolEducation = [
     marks: '531/600',
     percentage: '88.5%',
     rank: '3rd Rank',
+    pdfUrl: '/results/11th-result.pdf',
   },
   {
     grade: '10th Standard (SSLC)',
@@ -61,6 +80,7 @@ export const schoolEducation = [
     marks: '437/500',
     percentage: '87.4%',
     rank: '6th Rank',
+    pdfUrl: '/results/10th-result.pdf',
   },
 ];
 
