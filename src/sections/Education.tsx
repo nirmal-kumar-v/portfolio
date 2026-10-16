@@ -11,6 +11,7 @@ import {
   Building2,
   CheckCircle2,
   Info,
+  ExternalLink,
 } from 'lucide-react';
 import SectionHeader from '../components/SectionHeader';
 import { personalInfo, semesterGrades, schoolEducation } from '../data/personal';
@@ -204,13 +205,26 @@ export default function Education() {
                   className="pixel-card group p-4 rounded-lg border border-border hover:border-accent/40 cursor-pointer transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-bg-card hover:bg-bg-card-hover"
                 >
                   <div className="space-y-1">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-xs font-mono font-bold text-text-primary group-hover:text-accent-light transition-colors">
                         {exp.title}
                       </span>
                       <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-accent/10 border border-accent/20 text-accent-light">
                         {exp.badge}
                       </span>
+                      {exp.certificateUrl && (
+                        <a
+                          href={exp.certificateUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          title="View Certificate in new tab"
+                          className="text-[10px] font-mono px-2 py-0.5 rounded bg-gold/15 text-gold border border-gold/30 hover:bg-gold/25 hover:border-gold/60 transition-all cursor-pointer inline-flex items-center gap-1"
+                        >
+                          <span>Certificate</span>
+                          <ExternalLink className="w-2.5 h-2.5 opacity-70" />
+                        </a>
+                      )}
                     </div>
                     <div className="text-xs text-text-secondary font-sans">
                       {exp.organization}
@@ -243,15 +257,30 @@ export default function Education() {
                     className="pixel-card p-3 rounded-md border border-border hover:border-accent/40 cursor-pointer transition-all flex flex-col justify-between"
                   >
                     <div>
-                      <span
-                        className={`text-[9px] font-mono px-1.5 py-0.5 rounded uppercase tracking-wider inline-block mb-1.5 font-semibold ${
-                          cert.status === 'Elite + Gold'
-                            ? 'bg-gold/15 text-gold border border-gold/30'
-                            : 'bg-bg-secondary text-text-tertiary border border-border'
-                        }`}
-                      >
-                        {cert.grade}
-                      </span>
+                      <div className="flex items-center justify-between gap-1 mb-1.5">
+                        <span
+                          className={`text-[9px] font-mono px-1.5 py-0.5 rounded uppercase tracking-wider inline-block font-semibold ${
+                            cert.status === 'Elite + Gold'
+                              ? 'bg-gold/15 text-gold border border-gold/30'
+                              : 'bg-bg-secondary text-text-tertiary border border-border'
+                          }`}
+                        >
+                          {cert.grade}
+                        </span>
+                        {cert.certificateUrl && (
+                          <a
+                            href={cert.certificateUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            title="View certificate in new tab"
+                            className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-accent/10 border border-accent/30 text-accent hover:bg-accent hover:text-bg-primary transition-all inline-flex items-center gap-1 cursor-pointer"
+                          >
+                            <span>Certificate</span>
+                            <ExternalLink className="w-2 h-2 opacity-70" />
+                          </a>
+                        )}
+                      </div>
                       <h5 className="text-xs font-bold text-text-primary leading-snug">
                         {cert.title}
                       </h5>
@@ -306,6 +335,23 @@ export default function Education() {
                 ))}
               </ul>
             </div>
+
+            {selectedExperience.certificateUrl && (
+              <div className="pt-3 border-t border-border">
+                <a
+                  href={selectedExperience.certificateUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-tactile inline-flex items-center gap-2 px-3 py-2 rounded bg-gold/10 border border-gold/30 text-gold text-xs font-mono hover:bg-gold hover:text-bg-primary transition-all cursor-pointer group"
+                >
+                  <Award className="w-3.5 h-3.5" />
+                  <span>
+                    View {selectedExperience.id === 'wele-internship' ? 'Certificate of Excellence' : 'Course Certificate'} (New Tab)
+                  </span>
+                  <ExternalLink className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                </a>
+              </div>
+            )}
           </div>
         )}
       </Modal>
@@ -332,6 +378,21 @@ export default function Education() {
                 {selectedCert.notes}
               </p>
             </div>
+
+            {selectedCert.certificateUrl && (
+              <div className="pt-3 border-t border-border">
+                <a
+                  href={selectedCert.certificateUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-tactile inline-flex items-center gap-2 px-3 py-2 rounded bg-accent/10 border border-accent/30 text-accent text-xs font-mono hover:bg-accent hover:text-bg-primary transition-all cursor-pointer group"
+                >
+                  <Award className="w-3.5 h-3.5" />
+                  <span>View Official Certificate (New Tab)</span>
+                  <ExternalLink className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                </a>
+              </div>
+            )}
           </div>
         )}
       </Modal>

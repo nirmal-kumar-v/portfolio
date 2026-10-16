@@ -80,15 +80,33 @@ function AchievementCard({
 
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap mb-1.5">
-                <span
-                  className={`text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded ${
-                    isFirst
-                      ? 'bg-gold/15 text-gold border border-gold/30'
-                      : 'bg-slate-400/15 text-slate-300 border border-slate-400/30'
-                  }`}
-                >
-                  {achievement.result}
-                </span>
+                {achievement.certificateUrl ? (
+                  <a
+                    href={achievement.certificateUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    title={`View ${achievement.event} certificate in new tab`}
+                    className={`text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded transition-all duration-200 cursor-pointer inline-flex items-center gap-1 group/badge ${
+                      isFirst
+                        ? 'bg-gold/15 text-gold border border-gold/30 hover:bg-gold/25 hover:border-gold/60'
+                        : 'bg-slate-400/15 text-slate-300 border border-slate-400/30 hover:bg-slate-400/25 hover:border-slate-300'
+                    }`}
+                  >
+                    <span>{achievement.result}</span>
+                    <ExternalLink className="w-2.5 h-2.5 opacity-60 group-hover/badge:opacity-100" />
+                  </a>
+                ) : (
+                  <span
+                    className={`text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded ${
+                      isFirst
+                        ? 'bg-gold/15 text-gold border border-gold/30'
+                        : 'bg-slate-400/15 text-slate-300 border border-slate-400/30'
+                    }`}
+                  >
+                    {achievement.result}
+                  </span>
+                )}
                 <span className="text-[10px] font-mono text-text-tertiary uppercase px-1.5 py-0.5 rounded bg-bg-secondary border border-border">
                   {achievement.category}
                 </span>
@@ -197,8 +215,21 @@ function AchievementCard({
                 )}
 
                 {/* Project Links */}
-                {(achievement.demoUrl || achievement.githubUrl) && (
+                {(achievement.demoUrl || achievement.githubUrl || achievement.certificateUrl) && (
                   <div className="pt-2 flex flex-wrap items-center gap-2">
+                    {achievement.certificateUrl && (
+                      <a
+                        href={achievement.certificateUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="btn-tactile inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-gold/10 border border-gold/30 text-gold text-[11px] font-mono hover:bg-gold hover:text-bg-primary transition-all cursor-pointer"
+                      >
+                        <Award className="w-3 h-3" />
+                        <span>View Certificate</span>
+                        <ExternalLink className="w-2.5 h-2.5 opacity-60" />
+                      </a>
+                    )}
                     {achievement.demoUrl && (
                       <a
                         href={achievement.demoUrl}

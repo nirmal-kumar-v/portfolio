@@ -73,6 +73,7 @@ export interface TrainingExperienceItem {
   period?: string;
   description: string;
   details: string[];
+  certificateUrl?: string;
 }
 
 export const trainingExperiences: TrainingExperienceItem[] = [
@@ -90,6 +91,7 @@ export const trainingExperiences: TrainingExperienceItem[] = [
       'Semester 5 Curriculum: Competitive Programming & Complex Problem Solving',
       'Direct instruction and mentorship delivered by GeeksforGeeks trainers',
     ],
+    certificateUrl: '/certificates/gfg-kec-training-certificate.pdf',
   },
   {
     id: 'mist-tech',
@@ -119,6 +121,7 @@ export const trainingExperiences: TrainingExperienceItem[] = [
       'Reported context: 5 internship selections from over 500 participants',
       'Status: Offered/selected (not labeled as completed)',
     ],
+    certificateUrl: '/certificates/wele-internship-certificate.jpg',
   },
   {
     id: 'shaastra-iit',
@@ -158,6 +161,7 @@ export interface CertificationItem {
   grade: string;
   status: 'Completed' | 'Elite + Gold';
   notes?: string;
+  certificateUrl?: string;
 }
 
 export const certificationsList: CertificationItem[] = [
@@ -207,7 +211,8 @@ export const certificationsList: CertificationItem[] = [
     issuer: 'Kongu Engineering College',
     grade: 'Completed (Non-formal course)',
     status: 'Completed',
-    notes: 'Mandatory non-formal course covering core React theory and component state principles.',
+    notes: 'Mandatory non-formal course covering core React theory and component state principles (30 Hours).',
+    certificateUrl: '/certificates/kec-reactjs-certificate.jpg',
   },
 ];
 

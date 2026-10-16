@@ -30,6 +30,7 @@ export interface Project {
   githubUrl?: string;
   demoUrl?: string;
   statusNotes?: string;
+  certificateUrl?: string;
 }
 
 export const featuredProjects: Project[] = [
@@ -77,6 +78,7 @@ export const featuredProjects: Project[] = [
     demoUrl: 'https://kongu-kural.vercel.app',
     githubUrl: 'https://github.com/nirmal-kumar-v/kongu-kural',
     statusNotes: 'Production deployed website and active public GitHub repository.',
+    certificateUrl: '/certificates/tamil-mandram-hackathon-certificate.jpg',
   },
   {
     id: 'retail-pos',
@@ -136,6 +138,7 @@ export const featuredProjects: Project[] = [
     awardBadge: '1st Place · DevForge 2K26 24H',
     githubUrl: 'https://github.com/nirmal-kumar-v/Store-Management-System',
     statusNotes: 'DevForge 2K26 hackathon-winning codebase available on GitHub.',
+    certificateUrl: '/certificates/devforge-certificate.jpg',
   },
   {
     id: 'optivest',
@@ -309,6 +312,7 @@ export const featuredProjects: Project[] = [
     githubUrl: 'https://github.com/nirmal-kumar-v/careerLens',
     statusNotes:
       'Awarded 2nd Prize at KPR College. Source code repository available on GitHub.',
+    certificateUrl: '/certificates/kpr-neuroverse-certificate.jpg',
   },
   {
     id: 'setu',

@@ -12,6 +12,7 @@ export interface AchievementRecord {
   technologies?: string[];
   demoUrl?: string;
   githubUrl?: string;
+  certificateUrl?: string;
 }
 
 export const nineAchievements: AchievementRecord[] = [
@@ -30,6 +31,7 @@ export const nineAchievements: AchievementRecord[] = [
     technologies: ['React', 'Node.js', 'Express', 'NLP', 'Termux SMS'],
     demoUrl: 'https://kongu-kural.vercel.app',
     githubUrl: 'https://github.com/nirmal-kumar-v/kongu-kural',
+    certificateUrl: '/certificates/tamil-mandram-hackathon-certificate.jpg',
   },
   {
     id: 'devforge-24hr',
@@ -45,6 +47,7 @@ export const nineAchievements: AchievementRecord[] = [
     category: 'hackathon',
     technologies: ['React', 'Node.js', 'PostgreSQL', 'Express.js', 'RBAC'],
     githubUrl: 'https://github.com/nirmal-kumar-v/Store-Management-System',
+    certificateUrl: '/certificates/devforge-certificate.jpg',
   },
   {
     id: 'coe-hackathon',
@@ -138,6 +141,7 @@ export const nineAchievements: AchievementRecord[] = [
     category: 'presentation',
     technologies: ['Data Analytics', 'Profile Aggregation', 'Technical Evaluation'],
     githubUrl: 'https://github.com/nirmal-kumar-v/careerLens',
+    certificateUrl: '/certificates/kpr-neuroverse-certificate.jpg',
   },
   {
     id: 'ieee-bci',
@@ -152,5 +156,6 @@ export const nineAchievements: AchievementRecord[] = [
       'Presented an academic and technical research paper examining emerging Brain-Computer Interface architectures, neural signal processing, and assistive tech applications.',
     category: 'presentation',
     technologies: ['Neural Systems', 'Research Methodology', 'Emerging Technology'],
+    certificateUrl: '/certificates/ieee-vortex-certificate.jpg',
   },
 ];

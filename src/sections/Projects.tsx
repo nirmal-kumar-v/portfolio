@@ -78,7 +78,20 @@ function FeaturedCard({
 
           {/* Award badge: fixed height slot h-8 with clean punchy badge */}
           <div className="mt-3.5 h-8 flex items-center">
-            {project.awardBadge ? (
+            {project.certificateUrl ? (
+              <a
+                href={project.certificateUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-gold/10 border border-gold/30 text-gold text-xs font-mono max-w-full hover:bg-gold/20 hover:border-gold/60 transition-all cursor-pointer group/badge"
+                title={`View ${project.name} award certificate in new tab`}
+              >
+                <Trophy className="w-3.5 h-3.5 flex-shrink-0" />
+                <span className="truncate">{project.awardBadge || project.achievement}</span>
+                <ExternalLink className="w-2.5 h-2.5 opacity-60 group-hover/badge:opacity-100 transition-opacity" />
+              </a>
+            ) : project.awardBadge ? (
               <div
                 className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-gold/10 border border-gold/30 text-gold text-xs font-mono max-w-full"
                 title={project.achievement}
@@ -381,6 +394,11 @@ export default function Projects() {
 
             {/* Links Bar */}
             <div className="pt-4 border-t border-border flex flex-wrap items-center gap-3">
+              {selectedProject.certificateUrl && (
+                <Button href={selectedProject.certificateUrl} variant="outline" size="sm" icon="external">
+                  View Award Certificate
+                </Button>
+              )}
               {selectedProject.demoUrl && (
                 <Button href={selectedProject.demoUrl} variant="primary" size="sm" icon="external">
                   Live Deployment
