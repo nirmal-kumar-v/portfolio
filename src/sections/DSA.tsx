@@ -121,7 +121,7 @@ export default function DSA() {
           {/* LeetCode Panel */}
           <div
             onClick={() => setSelectedPanel(selectedPanel === 'leetcode' ? null : 'leetcode')}
-            className={`pixel-card p-6 rounded-lg cursor-pointer transition-all border ${
+            className={`pixel-card p-6 rounded-lg cursor-pointer transition-all border flex flex-col justify-between h-full ${
               selectedPanel === 'leetcode'
                 ? 'border-accent bg-bg-card-hover shadow-[0_0_20px_rgba(56,189,248,0.15)]'
                 : 'border-border hover:border-accent/30'
@@ -210,19 +210,19 @@ export default function DSA() {
           {/* GeeksforGeeks Panel */}
           <div
             onClick={() => setSelectedPanel(selectedPanel === 'gfg' ? null : 'gfg')}
-            className={`pixel-card p-6 rounded-lg cursor-pointer transition-all border ${
+            className={`pixel-card p-6 rounded-lg cursor-pointer transition-all border flex flex-col justify-between h-full ${
               selectedPanel === 'gfg'
                 ? 'border-emerald bg-bg-card-hover shadow-[0_0_20px_rgba(16,185,129,0.15)]'
                 : 'border-border hover:border-emerald/40'
             }`}
           >
-            <div className="flex items-start justify-between">
-              <div className="flex items-center gap-3">
-                <div className="p-3 rounded bg-emerald-500/10 border border-emerald-500/20">
+            <div className="flex items-start justify-between gap-2">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="p-3 rounded bg-emerald-500/10 border border-emerald-500/20 flex-shrink-0">
                   <GeeksforGeeksIcon className="w-6 h-6" colored />
                 </div>
-                <div>
-                  <div className="flex items-center gap-2">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
                     <h3 className="text-xl font-bold text-text-primary">GeeksforGeeks</h3>
                     <span className="text-xs font-mono text-text-tertiary">@nirmalkumar33</span>
                   </div>
@@ -247,7 +247,19 @@ export default function DSA() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <a
+                  href="/certificates/gfg-kec-training-certificate.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="px-2 py-1 rounded bg-gold/15 border border-gold/30 text-gold hover:bg-gold/25 hover:border-gold/60 text-[10px] font-mono inline-flex items-center gap-1 transition-all cursor-pointer"
+                  title="View Elite PAAC Program Certificate in new tab"
+                >
+                  <Award className="w-3 h-3" />
+                  <span>PAAC Cert</span>
+                  <ExternalLink className="w-2.5 h-2.5 opacity-70" />
+                </a>
                 <a
                   href={socialLinks.geeksforgeeks}
                   target="_blank"
@@ -435,15 +447,28 @@ export default function DSA() {
                     </p>
                   </div>
 
-                  <a
-                    href={socialLinks.geeksforgeeks}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-tactile inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-bg-secondary border border-border text-xs font-mono text-text-primary hover:border-emerald/40 self-start"
-                  >
-                    <span>Verify Profile on GFG</span>
-                    <ExternalLink className="w-3 h-3 text-emerald" />
-                  </a>
+                  <div className="flex items-center gap-2 self-start sm:self-auto flex-wrap">
+                    <a
+                      href="/certificates/gfg-kec-training-certificate.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-tactile inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-gold/10 border border-gold/30 text-gold text-xs font-mono hover:bg-gold hover:text-bg-primary transition-all cursor-pointer"
+                      title="View Elite PAAC Training Certificate in new tab"
+                    >
+                      <Award className="w-3.5 h-3.5" />
+                      <span>Elite PAAC Certificate</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                    <a
+                      href={socialLinks.geeksforgeeks}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-tactile inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-bg-secondary border border-border text-xs font-mono text-text-primary hover:border-emerald/40"
+                    >
+                      <span>Verify Profile on GFG</span>
+                      <ExternalLink className="w-3 h-3 text-emerald" />
+                    </a>
+                  </div>
                 </div>
 
                 {/* GeeksforGeeks Difficulty Breakdown (School/Basic, Easy, Medium, Hard) */}
@@ -563,11 +588,26 @@ export default function DSA() {
                 </div>
 
                 {/* Additional GFG verified context */}
-                <div className="p-4 rounded bg-bg-secondary/60 border border-border text-xs text-text-secondary leading-relaxed font-sans">
-                  <span className="font-mono text-emerald font-semibold block mb-1">INSTITUTIONAL ALIGNMENT:</span>
-                  Profile registered under <strong className="text-text-primary">Kongu Engineering College</strong>.
-                  Selected for the <strong className="text-text-primary">Elite PAAC Program</strong> conducted in collaboration
-                  with GeeksforGeeks trainers (selected ~80 out of 2,000 students screened, ~4%).
+                <div className="p-4 rounded bg-bg-secondary/60 border border-border text-xs text-text-secondary leading-relaxed font-sans flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="space-y-1">
+                    <span className="font-mono text-emerald font-semibold block">INSTITUTIONAL ALIGNMENT:</span>
+                    <p>
+                      Profile registered under <strong className="text-text-primary">Kongu Engineering College</strong>.
+                      Selected for the <strong className="text-text-primary">Elite PAAC Program</strong> conducted in collaboration
+                      with GeeksforGeeks trainers (selected ~80 out of 2,000 students screened, ~4%).
+                    </p>
+                  </div>
+                  <a
+                    href="/certificates/gfg-kec-training-certificate.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-tactile inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-gold/15 border border-gold/40 text-gold text-xs font-mono hover:bg-gold hover:text-bg-primary transition-all flex-shrink-0 self-start sm:self-center cursor-pointer"
+                    title="View Elite PAAC Certificate in new tab"
+                  >
+                    <Award className="w-3.5 h-3.5" />
+                    <span>View Certificate</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
                 </div>
               </div>
             </motion.div>

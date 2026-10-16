@@ -234,6 +234,34 @@ export default function Projects() {
                 <div className="mt-3 pt-2 border-t border-border/40 flex items-center justify-between text-[11px] font-mono text-text-tertiary h-6">
                   {item.achievement ? (
                     <span className="text-gold truncate max-w-[190px]">{item.achievement}</span>
+                  ) : item.demoUrl || item.githubUrl ? (
+                    <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                      {item.demoUrl && (
+                        <a
+                          href={item.demoUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[11px] text-accent hover:text-accent-light font-medium inline-flex items-center gap-1 transition-colors"
+                          title="Open live deployment"
+                        >
+                          <span>Live</span>
+                          <ExternalLink className="w-2.5 h-2.5" />
+                        </a>
+                      )}
+                      {item.demoUrl && item.githubUrl && <span className="text-border">·</span>}
+                      {item.githubUrl && (
+                        <a
+                          href={item.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[11px] text-text-secondary hover:text-text-primary inline-flex items-center gap-1 transition-colors"
+                          title="View GitHub repository"
+                        >
+                          <span>Code</span>
+                          <GithubIcon className="w-2.5 h-2.5" />
+                        </a>
+                      )}
+                    </div>
                   ) : (
                     <span>Inspect summary</span>
                   )}

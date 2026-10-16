@@ -437,6 +437,8 @@ export const moreProjects: MoreProjectItem[] = [
     description:
       'A personal credential management web application representing my first full-stack MERN project. Supports user authentication and full CRUD operations (add, edit, delete, view) on stored credentials.',
     technologies: ['React', 'Node.js', 'MongoDB', 'JWT', 'Express.js'],
+    demoUrl: 'https://secure-vault-coral.vercel.app/',
+    githubUrl: 'https://github.com/nirmal-kumar-v/SecureVault',
   },
   {
     id: 'campus-course-chat',
