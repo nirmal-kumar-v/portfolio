@@ -510,6 +510,27 @@ export default function Chatbot() {
       'why hire',
       'drop out',
       'clueless',
+      'gay',
+      'homo',
+      'homosexual',
+      'lesbian',
+      'straight',
+      'sexuality',
+      'orientation',
+      'girlfriend',
+      'boyfriend',
+      'dating',
+      'single',
+      'crush',
+      'virgin',
+      'marry',
+      'married',
+      'relationship',
+      'love life',
+      'dating life',
+      'simp',
+      'kiss',
+      'flirt',
     ];
 
     const roastReplyMarkers = [
@@ -525,8 +546,14 @@ export default function Chatbot() {
       'nice try',
       'script kiddie',
       'clock cycles',
+      'incognito tabs',
+      'looking for a date',
+      'out of his league',
       '🤡',
       '💀',
+      '💅',
+      '🔥',
+      '🗑️',
     ];
 
     const isTroll =

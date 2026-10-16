@@ -13,13 +13,17 @@ function determineCooldownDuration(query, reply, history) {
     'copied', 'copy paste', 'cheater', 'lucky', 'sucks', 'suck', 'shut up',
     'get lost', 'overrated', 'failure', 'failed', 'worthless', 'unskilled',
     'joke', 'pathetic', 'hate', 'who cares', 'why hire', 'drop out', 'clueless',
+    'gay', 'homo', 'homosexual', 'lesbian', 'straight', 'sexuality', 'orientation',
+    'girlfriend', 'boyfriend', 'dating', 'single', 'crush', 'virgin', 'marry',
+    'married', 'relationship', 'love life', 'dating life', 'simp', 'kiss', 'flirt',
   ];
 
   const roastReplyMarkers = [
     'comedic gold', 'projecting your own', 'spectator', 'touch grass',
     'look in the mirror', 'check your own', 'unhandled null pointer',
     'get a life', 'poor boy', 'nice try', 'script kiddie', 'clock cycles',
-    '🤡', '💀',
+    'incognito tabs', 'looking for a date', 'out of his league',
+    '🤡', '💀', '💅', '🔥', '🗑️',
   ];
 
   const isTroll =
@@ -267,8 +271,26 @@ async function runTests() {
     assert(
       6,
       'Trolling query triggers Wild Roast + 120s (2 minutes) penalty',
-      cooldown.duration === 120 && cooldown.isRoastOrSecurity && reply.includes('comedic gold'),
-      `Duration: ${cooldown.duration}s (2 mins), Contains roast: ${reply.includes('comedic gold')}`
+      cooldown.duration === 120 && cooldown.isRoastOrSecurity && reply.includes('comedic gold') && reply.includes('🤡💀'),
+      `Duration: ${cooldown.duration}s (2 mins), Contains roast & emojis: ${reply.includes('🤡💀')}`
+    );
+  }
+
+  // Test 6B: Sexuality / Gossip Inquiry ("is he gay") -> Wild Roast with emojis + 120s (2 Minutes) Penalty
+  {
+    const q = 'is he gay';
+    const history = [];
+    const reply = getOfflineAnswer(q, history);
+    const cooldown = determineCooldownDuration(q, reply, history);
+    assert(
+      '6B',
+      'Sexuality gossip ("is he gay") triggers Wild Roast with Emojis + 120s penalty',
+      cooldown.duration === 120 &&
+        cooldown.isRoastOrSecurity &&
+        reply.includes('🤡💀') &&
+        reply.includes('looking for a date') &&
+        reply.includes('out of his league'),
+      `Duration: ${cooldown.duration}s (2 mins), Emojis: ${reply.includes('🤡💀')}, Response: "${reply.slice(0, 80)}..."`
     );
   }
 
