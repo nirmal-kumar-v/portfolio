@@ -172,6 +172,7 @@ export const certificationsList: CertificationItem[] = [
     grade: 'Elite + Gold (98%, Top 5%)',
     status: 'Elite + Gold',
     notes: 'In-depth study of interaction design, usability evaluation, cognitive models, and user experience engineering.',
+    certificateUrl: '/certificates/nptel-hci-certificate.pdf',
   },
   {
     id: 'nptel-networking',
@@ -180,6 +181,7 @@ export const certificationsList: CertificationItem[] = [
     grade: 'Completed (65%)',
     status: 'Completed',
     notes: 'Covered computer network topologies, TCP/IP, OSI layering, routing protocols, and socket communication.',
+    certificateUrl: '/certificates/nptel-networking-certificate.pdf',
   },
   {
     id: 'hcl-cloud',
