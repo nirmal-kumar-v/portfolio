@@ -193,11 +193,12 @@ export const certificationsList: CertificationItem[] = [
   },
   {
     id: 'hcl-python',
-    title: 'Python Programming',
-    issuer: 'HCL Technologies',
-    grade: 'Completed',
+    title: 'AI LLM Python',
+    issuer: 'HCLTech',
+    grade: 'Completed (45 Hours)',
     status: 'Completed',
-    notes: 'Python syntax, data structures, and functional scripting. (Practical experience was limited).',
+    notes: 'Completed 45 hours of technical training on AI LLM Python conducted by HCLTech (February – May 2026).',
+    certificateUrl: '/certificates/hcl-ai-llm-python-certificate.pdf',
   },
   {
     id: 'nonformal-pc',
