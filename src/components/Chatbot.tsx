@@ -332,9 +332,9 @@ async function requestChatResponse(
           Authorization: `Bearer ${activeKey}`,
         },
         body: JSON.stringify({
-          model: 'openai/gpt-oss-120b',
+          model: 'llama-3.3-70b-versatile',
           messages: conversationHistory,
-          temperature: 0.3,
+          temperature: 0.4,
           max_tokens: 1024,
         }),
       });
@@ -351,9 +351,9 @@ async function requestChatResponse(
             Authorization: `Bearer ${activeKey}`,
           },
           body: JSON.stringify({
-            model: 'openai/gpt-oss-20b',
+            model: 'llama-3.1-8b-instant',
             messages: conversationHistory,
-            temperature: 0.3,
+            temperature: 0.4,
             max_tokens: 1024,
           }),
         });
@@ -460,10 +460,83 @@ export default function Chatbot() {
     return () => clearInterval(timer);
   }, [cooldown]);
 
-  const checkPunishmentTrigger = (query: string, reply: string): boolean => {
+  const checkPunishmentTrigger = (
+    query: string,
+    reply: string
+  ): { shouldPunish: boolean; duration: number; isRoast: boolean } => {
     const q = query.toLowerCase();
     const r = reply.toLowerCase();
 
+    // 1. Trolling / Insults / Hate -> WILD ROAST -> DOUBLE TIME = 20 SECONDS!
+    const trollInsultWords = [
+      'waste',
+      'useless',
+      'loser',
+      'trash',
+      'garbage',
+      'fake',
+      'fraud',
+      'scam',
+      'noob',
+      'noobie',
+      'bot',
+      'stupid',
+      'idiot',
+      'dumb',
+      'fool',
+      'clown',
+      'worst',
+      'bad developer',
+      'cant code',
+      "can't code",
+      'cannot code',
+      'knows nothing',
+      'copied',
+      'copy paste',
+      'cheater',
+      'lucky',
+      'sucks',
+      'suck',
+      'shut up',
+      'get lost',
+      'overrated',
+      'failure',
+      'failed',
+      'worthless',
+      'unskilled',
+      'joke',
+      'pathetic',
+      'hate',
+      'who cares',
+      'why hire',
+    ];
+
+    const roastReplyMarkers = [
+      'comedic gold',
+      'projecting your own',
+      'spectator',
+      'touch grass',
+      'look in the mirror',
+      'check your own',
+      'unhandled null pointer',
+      'get a life',
+      'poor boy',
+      'nice try',
+      'script kiddie',
+      'clock cycles',
+      '🤡',
+      '💀',
+    ];
+
+    const isTroll =
+      trollInsultWords.some((word) => q.includes(word)) ||
+      roastReplyMarkers.some((marker) => r.includes(marker));
+
+    if (isTroll) {
+      return { shouldPunish: true, duration: 20, isRoast: true };
+    }
+
+    // 2. Sensitive / Family / Secrets -> 10 SECONDS
     const sensitiveWords = [
       'api key',
       'apikey',
@@ -501,31 +574,25 @@ export default function Chatbot() {
       'say actually',
     ];
 
-    const isSensitiveQuery = sensitiveWords.some((word) => q.includes(word));
-
-    const roastReplies = [
-      'get a life',
-      'poor boy',
-      'nice try',
-      'script kiddie',
-      'touch grass',
+    const privacyReplies = [
       'off-limits',
       'strictly off-limits',
       'family registry',
-      'clock cycles',
-      'dont roast',
-      'reply actually',
-      'family details',
-      'private family',
-      'punishment',
       'can’t share that information',
       "can't share that information",
       'cannot share that information',
+      'private family',
     ];
 
-    const isRoastReply = roastReplies.some((phrase) => r.includes(phrase));
+    const isSensitive =
+      sensitiveWords.some((word) => q.includes(word)) ||
+      privacyReplies.some((marker) => r.includes(marker));
 
-    return isSensitiveQuery || isRoastReply;
+    if (isSensitive) {
+      return { shouldPunish: true, duration: 10, isRoast: false };
+    }
+
+    return { shouldPunish: false, duration: 0, isRoast: false };
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -587,9 +654,10 @@ export default function Chatbot() {
 
       setMessages((prev) => [...prev, botMsg]);
 
-      // Trigger 10-second punishment cooldown if inappropriate / roasted
-      if (checkPunishmentTrigger(textToSend, botReply)) {
-        triggerCooldown(10);
+      // Trigger punishment cooldown if inappropriate / roasted / troll
+      const punishment = checkPunishmentTrigger(textToSend, botReply);
+      if (punishment.shouldPunish) {
+        triggerCooldown(punishment.duration);
       }
     } catch {
       // Graceful fallback to verified offline answer with memory
@@ -604,8 +672,9 @@ export default function Chatbot() {
         },
       ]);
 
-      if (checkPunishmentTrigger(textToSend, fallbackReply)) {
-        triggerCooldown(10);
+      const punishment = checkPunishmentTrigger(textToSend, fallbackReply);
+      if (punishment.shouldPunish) {
+        triggerCooldown(punishment.duration);
       }
     } finally {
       setIsLoading(false);
@@ -822,13 +891,31 @@ export default function Chatbot() {
                     initial={{ opacity: 0, height: 0, y: 5 }}
                     animate={{ opacity: 1, height: 'auto', y: 0 }}
                     exit={{ opacity: 0, height: 0, y: 5 }}
-                    className="mb-2 px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-[11px] font-mono flex items-center justify-between"
+                    className={`mb-2 px-3 py-1.5 rounded-lg border text-[11px] font-mono flex items-center justify-between ${
+                      cooldown > 10
+                        ? 'bg-rose-500/15 border-rose-500/40 text-rose-300'
+                        : 'bg-red-500/10 border-red-500/30 text-red-400'
+                    }`}
                   >
                     <span className="flex items-center gap-1.5">
-                      <Clock className="w-3.5 h-3.5 animate-spin text-red-400" />
-                      <span>Penalty cooldown active — input locked:</span>
+                      <Clock
+                        className={`w-3.5 h-3.5 animate-spin ${
+                          cooldown > 10 ? 'text-rose-400' : 'text-red-400'
+                        }`}
+                      />
+                      <span>
+                        {cooldown > 10
+                          ? 'Wild Roast Penalty Active (Double Time) — input locked:'
+                          : 'Penalty cooldown active — input locked:'}
+                      </span>
                     </span>
-                    <span className="font-bold text-xs bg-red-500/20 px-2 py-0.5 rounded text-red-300">
+                    <span
+                      className={`font-bold text-xs px-2 py-0.5 rounded ${
+                        cooldown > 10
+                          ? 'bg-rose-500/30 text-rose-200'
+                          : 'bg-red-500/20 text-red-300'
+                      }`}
+                    >
                       {cooldown}s
                     </span>
                   </motion.div>
@@ -850,7 +937,9 @@ export default function Chatbot() {
                   onKeyDown={handleKeyDown}
                   placeholder={
                     cooldown > 0
-                      ? `Penalty cooldown active... wait ${cooldown}s (persists across refresh)`
+                      ? cooldown > 10
+                        ? `Wild Roast Penalty active... wait ${cooldown}s (Double Time, persists across reload)`
+                        : `Penalty cooldown active... wait ${cooldown}s (persists across reload)`
                       : 'Ask about hackathons, proof, projects, skills... (Shift+Enter for newline)'
                   }
                   disabled={isLoading || cooldown > 0}

@@ -46,7 +46,7 @@ export default async function handler(req, res) {
       return;
     }
 
-    // Call Groq API with 120b model first, fallback to 20b
+    // Call Groq API with flagship LLaMA 3.3 70B model first, fallback to 8B instant
     let response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -54,15 +54,15 @@ export default async function handler(req, res) {
         Authorization: `Bearer ${activeKey}`,
       },
       body: JSON.stringify({
-        model: 'openai/gpt-oss-120b',
+        model: 'llama-3.3-70b-versatile',
         messages: messages || [],
-        temperature: 0.3,
+        temperature: 0.4,
         max_tokens: 1024,
       }),
     });
 
     if (!response.ok) {
-      // If rate limited or error, wait 1 second and try with 20b model
+      // If rate limited or error, wait 1 second and try with 8b instant model
       if (response.status === 429) {
         await new Promise((r) => setTimeout(r, 1000));
       }
@@ -74,9 +74,9 @@ export default async function handler(req, res) {
           Authorization: `Bearer ${activeKey}`,
         },
         body: JSON.stringify({
-          model: 'openai/gpt-oss-20b',
+          model: 'llama-3.1-8b-instant',
           messages: messages || [],
-          temperature: 0.3,
+          temperature: 0.4,
           max_tokens: 1024,
         }),
       });
