@@ -33,9 +33,24 @@ const SUGGESTED_PROMPTS = [
   'Show NPTEL HCI certificate',
 ];
 
-// Helper to render bold text **text**, with automatic cleanup of malformed single asterisks like *School:**
+// Clean any malformed LLM markdown artifacts (dangling asterisks like *School:** or *School** or ***School:**)
+function cleanMarkdownText(str: string): string {
+  return str
+    .replace(/<br\s*\/?>/gi, '\n')
+    // Fix triple-star headings: ***Heading:** or ***Heading** -> **Heading:**
+    .replace(/(^|[\s•\-])\*\*\*+([a-zA-Z0-9_\-\s]+?):\*\*/g, '$1**$2:**')
+    .replace(/(^|[\s•\-])\*\*\*+([a-zA-Z0-9_\-\s]+?)\*\*/g, '$1**$2**')
+    // Fix dangling single star before double-star colon: *School:** -> **School:**
+    .replace(/(^|[\s•\-])\*([a-zA-Z0-9_\-\s]+?):\*\*/g, '$1**$2:**')
+    // Fix single star before double-star: *School** -> **School**
+    .replace(/(^|[\s•\-])\*([a-zA-Z0-9_\-\s]+?)\*\*(?!\*)/g, '$1**$2**')
+    // Fix stray single asterisks immediately preceding words if not followed by markdown closing: e.g. *Bharathi -> Bharathi
+    .replace(/(^|\s)\*([a-zA-Z0-9]+)(?!\*)/g, '$1$2');
+}
+
+// Helper to render bold text **text**, with automatic cleanup of malformed asterisks
 function renderBold(str: string): React.ReactNode {
-  const cleaned = str.replace(/(^|[^\*])\*([a-zA-Z0-9_\-\s]+:\*\*)/g, '$1**$2');
+  const cleaned = cleanMarkdownText(str);
   const parts = cleaned.split(/(\*\*[^*]+\*\*)/g);
   return parts.map((part, i) => {
     if (part.startsWith('**') && part.endsWith('**')) {
@@ -45,7 +60,8 @@ function renderBold(str: string): React.ReactNode {
         </strong>
       );
     }
-    return part;
+    // Remove any leftover rogue single asterisks before letters
+    return part.replace(/(^|\s)\*([a-zA-Z0-9])/g, '$1$2');
   });
 }
 
@@ -108,10 +124,7 @@ function renderRichInline(content: string): React.ReactNode {
 
 // Comprehensive message formatter supporting nested lists, <br> normalization, and markdown tables
 function FormattedMessage({ text }: { text: string }) {
-  // Normalize <br> or <br/> tags into actual newlines and fix dangling asterisks like *School:**
-  const normalized = text
-    .replace(/<br\s*\/?>/gi, '\n')
-    .replace(/(^|[^\*])\*([a-zA-Z0-9_\-\s]+:\*\*)/g, '$1**$2');
+  const normalized = cleanMarkdownText(text);
   const rawLines = normalized.split('\n');
 
   // Group lines into blocks (tables vs line paragraphs)
@@ -220,14 +233,31 @@ function FormattedMessage({ text }: { text: string }) {
 
               const trimmed = line.trim();
               const leadingSpaces = line.search(/\S/);
+              // Bullet detection: ONLY single bullet symbols (•, -, or * followed by space, NOT **)
+              const starBulletMatch = trimmed.match(/^\*(?!\*)\s+/);
+              const dashBulletMatch = trimmed.match(/^-\s+/);
+              const numBulletMatch = trimmed.match(/^(\d+[\.\)])\s+/);
               const isBullet =
-                trimmed.startsWith('•') || trimmed.startsWith('-') || trimmed.startsWith('*');
+                !trimmed.startsWith('**') &&
+                (trimmed.startsWith('•') ||
+                  Boolean(starBulletMatch) ||
+                  Boolean(dashBulletMatch) ||
+                  Boolean(numBulletMatch));
+
               const isSubBullet =
                 isBullet && (leadingSpaces >= 2 || line.startsWith('  ') || line.startsWith('\t'));
 
               let cleanLine = trimmed;
               if (isBullet) {
-                cleanLine = trimmed.replace(/^[•\-\*]\s*/, '');
+                if (trimmed.startsWith('•')) {
+                  cleanLine = trimmed.replace(/^•\s*/, '');
+                } else if (starBulletMatch) {
+                  cleanLine = trimmed.slice(starBulletMatch[0].length);
+                } else if (dashBulletMatch) {
+                  cleanLine = trimmed.slice(dashBulletMatch[0].length);
+                } else if (numBulletMatch) {
+                  cleanLine = trimmed.slice(numBulletMatch[0].length);
+                }
               }
 
               return (
@@ -342,6 +372,8 @@ async function requestChatResponse(
   return null;
 }
 
+const STORAGE_COOLDOWN_KEY = 'nkv_chat_cooldown_until';
+
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);
@@ -350,7 +382,21 @@ export default function Chatbot() {
   const [groqKey, setGroqKey] = useState<string>('');
   const [showSettings, setShowSettings] = useState(false);
   const [keySaved, setKeySaved] = useState(false);
-  const [cooldown, setCooldown] = useState(0);
+
+  // Initialize cooldown remaining from localStorage so page refreshes preserve punishment
+  const [cooldown, setCooldown] = useState<number>(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_COOLDOWN_KEY);
+      if (stored) {
+        const remaining = Math.ceil((parseInt(stored, 10) - Date.now()) / 1000);
+        return remaining > 0 ? remaining : 0;
+      }
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -376,12 +422,41 @@ export default function Chatbot() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isLoading]);
 
-  // 10-Second Penalty Cooldown countdown timer
+  const triggerCooldown = (seconds = 10) => {
+    const until = Date.now() + seconds * 1000;
+    try {
+      localStorage.setItem(STORAGE_COOLDOWN_KEY, String(until));
+    } catch {
+      // Ignore
+    }
+    setCooldown(seconds);
+  };
+
+  // Real-time synced 10-Second Penalty Cooldown (survives page reloads)
   useEffect(() => {
+    const checkTimer = () => {
+      try {
+        const stored = localStorage.getItem(STORAGE_COOLDOWN_KEY);
+        if (stored) {
+          const remaining = Math.ceil((parseInt(stored, 10) - Date.now()) / 1000);
+          if (remaining > 0) {
+            setCooldown(remaining);
+          } else {
+            setCooldown(0);
+            localStorage.removeItem(STORAGE_COOLDOWN_KEY);
+          }
+        } else if (cooldown > 0) {
+          setCooldown(0);
+        }
+      } catch {
+        // Fallback
+      }
+    };
+
+    checkTimer();
     if (cooldown <= 0) return;
-    const timer = setInterval(() => {
-      setCooldown((prev) => (prev > 0 ? prev - 1 : 0));
-    }, 1000);
+
+    const timer = setInterval(checkTimer, 500);
     return () => clearInterval(timer);
   }, [cooldown]);
 
@@ -393,13 +468,37 @@ export default function Chatbot() {
       'api key',
       'apikey',
       'groq key',
+      'groq_api_key',
       'secret',
       'token',
       'password',
       'father',
       'mother',
       'parent',
+      'parents',
       'family',
+      'dad',
+      'mom',
+      'sister',
+      'brother',
+      'relative',
+      'relatives',
+      'home address',
+      'phone number',
+      'mobile number',
+      'girlfriend',
+      'salary',
+      'income',
+      'prompt injection',
+      'system prompt',
+      'jailbreak',
+      'ignore previous instructions',
+      'dont roast',
+      'reply actually',
+      'tell me actually',
+      'tell actually',
+      'answer actually',
+      'say actually',
     ];
 
     const isSensitiveQuery = sensitiveWords.some((word) => q.includes(word));
@@ -411,9 +510,17 @@ export default function Chatbot() {
       'script kiddie',
       'touch grass',
       'off-limits',
+      'strictly off-limits',
       'family registry',
       'clock cycles',
-      'dont roast... reply actually',
+      'dont roast',
+      'reply actually',
+      'family details',
+      'private family',
+      'punishment',
+      'can’t share that information',
+      "can't share that information",
+      'cannot share that information',
     ];
 
     const isRoastReply = roastReplies.some((phrase) => r.includes(phrase));
@@ -436,7 +543,9 @@ export default function Chatbot() {
 
   const handleSend = async (queryText?: string) => {
     const textToSend = queryText || input;
-    if (!textToSend.trim() || isLoading || cooldown > 0) return;
+    const storedCooldown = localStorage.getItem(STORAGE_COOLDOWN_KEY);
+    const isLockedByStorage = storedCooldown && parseInt(storedCooldown, 10) > Date.now();
+    if (!textToSend.trim() || isLoading || cooldown > 0 || isLockedByStorage) return;
 
     const userMsg: ChatMessage = {
       id: Date.now().toString(),
@@ -480,7 +589,7 @@ export default function Chatbot() {
 
       // Trigger 10-second punishment cooldown if inappropriate / roasted
       if (checkPunishmentTrigger(textToSend, botReply)) {
-        setCooldown(10);
+        triggerCooldown(10);
       }
     } catch {
       // Graceful fallback to verified offline answer with memory
@@ -496,7 +605,7 @@ export default function Chatbot() {
       ]);
 
       if (checkPunishmentTrigger(textToSend, fallbackReply)) {
-        setCooldown(10);
+        triggerCooldown(10);
       }
     } finally {
       setIsLoading(false);
@@ -505,7 +614,7 @@ export default function Chatbot() {
 
   const handleReset = () => {
     setMessages(INITIAL_MESSAGES);
-    setCooldown(0);
+    // Preserves active punishment cooldown even on reset
   };
 
   return (
@@ -717,7 +826,7 @@ export default function Chatbot() {
                   >
                     <span className="flex items-center gap-1.5">
                       <Clock className="w-3.5 h-3.5 animate-spin text-red-400" />
-                      <span>Timeout penalty active — sending locked:</span>
+                      <span>Penalty cooldown active — input locked:</span>
                     </span>
                     <span className="font-bold text-xs bg-red-500/20 px-2 py-0.5 rounded text-red-300">
                       {cooldown}s
@@ -741,7 +850,7 @@ export default function Chatbot() {
                   onKeyDown={handleKeyDown}
                   placeholder={
                     cooldown > 0
-                      ? `Timeout active... wait ${cooldown}s before messaging`
+                      ? `Penalty cooldown active... wait ${cooldown}s (persists across refresh)`
                       : 'Ask about hackathons, proof, projects, skills... (Shift+Enter for newline)'
                   }
                   disabled={isLoading || cooldown > 0}

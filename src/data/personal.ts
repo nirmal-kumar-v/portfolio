@@ -12,6 +12,7 @@ export const personalInfo = {
   email: 'nirmalkumar31082006@gmail.com',
   collegeEmail: 'nirmalkumarv.24it@kongu.edu',
   college: 'Kongu Engineering College',
+  school: 'Veera Sivaji Vidhyalaya Matric Hr. Sec. School, Tiruppur',
   degree: 'B.Tech — Information Technology',
   currentYear: 'Third Year',
   currentSemester: 'Fifth Semester',
