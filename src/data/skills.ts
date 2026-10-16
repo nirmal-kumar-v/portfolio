@@ -64,6 +64,13 @@ export const techStack = [
   },
 ];
 
+export interface ExperienceCertificate {
+  label: string;
+  badgeLabel?: string;
+  url: string;
+  variant?: 'gold' | 'accent';
+}
+
 export interface TrainingExperienceItem {
   id: string;
   title: string;
@@ -75,6 +82,7 @@ export interface TrainingExperienceItem {
   details: string[];
   certificateUrl?: string;
   hackathonCertificateUrl?: string;
+  certificates?: ExperienceCertificate[];
 }
 
 export const trainingExperiences: TrainingExperienceItem[] = [
@@ -93,20 +101,42 @@ export const trainingExperiences: TrainingExperienceItem[] = [
       'Direct instruction and mentorship delivered by GeeksforGeeks trainers',
     ],
     certificateUrl: '/certificates/gfg-kec-training-certificate.pdf',
+    certificates: [
+      {
+        label: 'GeeksforGeeks Training Certificate',
+        badgeLabel: 'Certificate',
+        url: '/certificates/gfg-kec-training-certificate.pdf',
+        variant: 'gold',
+      },
+    ],
   },
   {
     id: 'mist-tech',
     title: 'In-Plant Training',
-    organization: 'Mist Technology',
+    organization: 'Mist Software Solutions Pvt Ltd, Coimbatore',
     type: 'In-Plant Training',
     badge: '15 Days Completed',
     description:
-      'Completed a focused 15-day technical in-plant training immersion covering core web technologies and frontend application development.',
+      'Completed 15 days of industrial in-plant training covering frontend application development (8 days) and web technology fundamentals (7 days).',
     details: [
-      'Duration: Exactly 15 days of hands-on technical training',
-      '8 Days: Web Development architecture, backend basics, and client-server communication',
-      '7 Days: Frontend Development, component design, and responsive interfaces',
-      'Recorded as completed in-plant training',
+      'Duration: Exactly 15 days of hands-on technical industrial training',
+      '8 Days: Frontend Development (11th December 2025 to 19th December 2025)',
+      '7 Days: Web Technology (07th July 2025 to 14th July 2025)',
+      'Verified with official in-plant training completion certificates from Mist Software Solutions Pvt Ltd',
+    ],
+    certificates: [
+      {
+        label: 'Frontend Development Certificate (8 Days)',
+        badgeLabel: 'Frontend (8D)',
+        url: '/certificates/mist-frontend-development-certificate.pdf',
+        variant: 'accent',
+      },
+      {
+        label: 'Web Technology Certificate (7 Days)',
+        badgeLabel: 'Web Tech (7D)',
+        url: '/certificates/mist-web-technology-certificate.png',
+        variant: 'accent',
+      },
     ],
   },
   {
@@ -124,20 +154,46 @@ export const trainingExperiences: TrainingExperienceItem[] = [
     ],
     certificateUrl: '/certificates/wele-internship-certificate.jpg',
     hackathonCertificateUrl: '/certificates/vit-dataquest-hackathon-certificate.pdf',
+    certificates: [
+      {
+        label: 'WeLe Internship Offer Letter',
+        badgeLabel: 'Internship Offer',
+        url: '/certificates/wele-internship-certificate.jpg',
+        variant: 'gold',
+      },
+      {
+        label: 'VIT DataQuest 3 Hackathon Certificate',
+        badgeLabel: 'DataQuest Cert',
+        url: '/certificates/vit-dataquest-hackathon-certificate.pdf',
+        variant: 'accent',
+      },
+    ],
   },
   {
     id: 'shaastra-iit',
-    title: 'Shaastra 2026 Hackathon',
-    organization: 'IIT Madras × Visa',
+    title: 'Shaastra 2026 Technical Events & Hackathons',
+    organization: 'IIT Madras (Shaastra 2026)',
     type: 'Hackathon',
-    badge: '24-Hour Hackathon',
+    badge: '7 Events Participated',
     description:
-      'Competed in a high-intensity 24-hour sprint developing a personalized financial benefits assistant.',
+      'Participated across 7 competitive technical events and hackathons at Shaastra 2026, Indian Institute of Technology (IIT), Madras.',
     details: [
-      'Role: Team Member (Team Lead: Nithish Kumar T S)',
-      'Project Concept: Personalized Credit Card Benefits Assistant designed to deliver contextual notifications for cardholders (e.g., airport lounge access)',
-      'Collaboration between IIT Madras Shaastra and Visa',
-      'Participated as a competitive developer sprint (no prize claimed)',
+      'Visa 24hrs AI Hackathon: Personalized Credit Card Benefits Assistant (Team Member with Nithish Kumar T S)',
+      'MOSIP Decode Hackathon | Digital Governance Summit 2026: Open-source digital identity challenge',
+      'NeuroHACK: Shaastra 2026 technical hackathon',
+      'Capture the Flag (CTF): Cybersecurity and exploitation challenge',
+      'Reverse Coding X: Code pattern deduction and algorithmic reconstruction',
+      'CP Potpourri 2026: Fast-paced competitive programming contest',
+      'E-Contest: Engineering technical competition',
+    ],
+    certificateUrl: '/certificates/iit-madras-shaastra-certificates.pdf',
+    certificates: [
+      {
+        label: 'Shaastra 2026 Certificates (All 7 Events at IIT Madras)',
+        badgeLabel: 'Shaastra (7 Events)',
+        url: '/certificates/iit-madras-shaastra-certificates.pdf',
+        variant: 'accent',
+      },
     ],
   },
   {

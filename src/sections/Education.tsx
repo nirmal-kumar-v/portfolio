@@ -212,31 +212,54 @@ export default function Education() {
                       <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-accent/10 border border-accent/20 text-accent-light">
                         {exp.badge}
                       </span>
-                      {exp.certificateUrl && (
-                        <a
-                          href={exp.certificateUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={(e) => e.stopPropagation()}
-                          title={exp.hackathonCertificateUrl ? "View Internship Certificate in new tab" : "View Certificate in new tab"}
-                          className="text-[10px] font-mono px-2 py-0.5 rounded bg-gold/15 text-gold border border-gold/30 hover:bg-gold/25 hover:border-gold/60 transition-all cursor-pointer inline-flex items-center gap-1"
-                        >
-                          <span>{exp.hackathonCertificateUrl ? "Internship Offer" : "Certificate"}</span>
-                          <ExternalLink className="w-2.5 h-2.5 opacity-70" />
-                        </a>
-                      )}
-                      {exp.hackathonCertificateUrl && (
-                        <a
-                          href={exp.hackathonCertificateUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={(e) => e.stopPropagation()}
-                          title="View DataQuest 3 Hackathon Certificate in new tab"
-                          className="text-[10px] font-mono px-2 py-0.5 rounded bg-accent/10 text-accent border border-accent/30 hover:bg-accent/20 hover:border-accent transition-all cursor-pointer inline-flex items-center gap-1"
-                        >
-                          <span>DataQuest Cert</span>
-                          <ExternalLink className="w-2.5 h-2.5 opacity-70" />
-                        </a>
+                      {exp.certificates && exp.certificates.length > 0 ? (
+                        exp.certificates.map((cert) => (
+                          <a
+                            key={cert.url}
+                            href={cert.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            title={`View ${cert.label} in new tab`}
+                            className={`text-[10px] font-mono px-2 py-0.5 rounded border hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer inline-flex items-center gap-1 ${
+                              cert.variant === 'gold'
+                                ? 'bg-gold/15 text-gold border-gold/30 hover:bg-gold/25 hover:border-gold/60'
+                                : 'bg-accent/10 text-accent border-accent/30 hover:bg-accent/20 hover:border-accent'
+                            }`}
+                          >
+                            <span>{cert.badgeLabel || cert.label}</span>
+                            <ExternalLink className="w-2.5 h-2.5 opacity-70" />
+                          </a>
+                        ))
+                      ) : (
+                        <>
+                          {exp.certificateUrl && (
+                            <a
+                              href={exp.certificateUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              title={exp.hackathonCertificateUrl ? "View Internship Certificate in new tab" : "View Certificate in new tab"}
+                              className="text-[10px] font-mono px-2 py-0.5 rounded bg-gold/15 text-gold border border-gold/30 hover:bg-gold/25 hover:border-gold/60 transition-all cursor-pointer inline-flex items-center gap-1"
+                            >
+                              <span>{exp.hackathonCertificateUrl ? "Internship Offer" : "Certificate"}</span>
+                              <ExternalLink className="w-2.5 h-2.5 opacity-70" />
+                            </a>
+                          )}
+                          {exp.hackathonCertificateUrl && (
+                            <a
+                              href={exp.hackathonCertificateUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              title="View DataQuest 3 Hackathon Certificate in new tab"
+                              className="text-[10px] font-mono px-2 py-0.5 rounded bg-accent/10 text-accent border border-accent/30 hover:bg-accent/20 hover:border-accent transition-all cursor-pointer inline-flex items-center gap-1"
+                            >
+                              <span>DataQuest Cert</span>
+                              <ExternalLink className="w-2.5 h-2.5 opacity-70" />
+                            </a>
+                          )}
+                        </>
                       )}
                     </div>
                     <div className="text-xs text-text-secondary font-sans">
@@ -349,33 +372,57 @@ export default function Education() {
               </ul>
             </div>
 
-            {(selectedExperience.certificateUrl || selectedExperience.hackathonCertificateUrl) && (
+            {((selectedExperience.certificates && selectedExperience.certificates.length > 0) ||
+              selectedExperience.certificateUrl ||
+              selectedExperience.hackathonCertificateUrl) && (
               <div className="pt-3 border-t border-border flex flex-wrap gap-2">
-                {selectedExperience.certificateUrl && (
-                  <a
-                    href={selectedExperience.certificateUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-tactile inline-flex items-center gap-2 px-3 py-2 rounded bg-gold/10 border border-gold/30 text-gold text-xs font-mono hover:bg-gold hover:text-bg-primary transition-all cursor-pointer group"
-                  >
-                    <Award className="w-3.5 h-3.5" />
-                    <span>
-                      View {selectedExperience.id === 'wele-internship' ? 'WeLe Internship Offer' : 'Course Certificate'} (New Tab)
-                    </span>
-                    <ExternalLink className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
-                  </a>
-                )}
-                {selectedExperience.hackathonCertificateUrl && (
-                  <a
-                    href={selectedExperience.hackathonCertificateUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-tactile inline-flex items-center gap-2 px-3 py-2 rounded bg-accent/10 border border-accent/30 text-accent text-xs font-mono hover:bg-accent hover:text-bg-primary transition-all cursor-pointer group"
-                  >
-                    <Award className="w-3.5 h-3.5" />
-                    <span>View DataQuest 3 Hackathon Certificate (New Tab)</span>
-                    <ExternalLink className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
-                  </a>
+                {selectedExperience.certificates && selectedExperience.certificates.length > 0 ? (
+                  selectedExperience.certificates.map((cert) => (
+                    <a
+                      key={cert.url}
+                      href={cert.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`btn-tactile inline-flex items-center gap-2 px-3 py-2 rounded border text-xs font-mono transition-all cursor-pointer group ${
+                        cert.variant === 'gold'
+                          ? 'bg-gold/10 border-gold/30 text-gold hover:bg-gold hover:text-bg-primary'
+                          : 'bg-accent/10 border-accent/30 text-accent hover:bg-accent hover:text-bg-primary'
+                      }`}
+                    >
+                      <Award className="w-3.5 h-3.5" />
+                      <span>View {cert.label} (New Tab)</span>
+                      <ExternalLink className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                    </a>
+                  ))
+                ) : (
+                  <>
+                    {selectedExperience.certificateUrl && (
+                      <a
+                        href={selectedExperience.certificateUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn-tactile inline-flex items-center gap-2 px-3 py-2 rounded bg-gold/10 border border-gold/30 text-gold text-xs font-mono hover:bg-gold hover:text-bg-primary transition-all cursor-pointer group"
+                      >
+                        <Award className="w-3.5 h-3.5" />
+                        <span>
+                          View {selectedExperience.id === 'wele-internship' ? 'WeLe Internship Offer' : 'Course Certificate'} (New Tab)
+                        </span>
+                        <ExternalLink className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                      </a>
+                    )}
+                    {selectedExperience.hackathonCertificateUrl && (
+                      <a
+                        href={selectedExperience.hackathonCertificateUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn-tactile inline-flex items-center gap-2 px-3 py-2 rounded bg-accent/10 border border-accent/30 text-accent text-xs font-mono hover:bg-accent hover:text-bg-primary transition-all cursor-pointer group"
+                      >
+                        <Award className="w-3.5 h-3.5" />
+                        <span>View DataQuest 3 Hackathon Certificate (New Tab)</span>
+                        <ExternalLink className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                      </a>
+                    )}
+                  </>
                 )}
               </div>
             )}
