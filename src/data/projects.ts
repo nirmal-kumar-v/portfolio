@@ -31,6 +31,7 @@ export interface Project {
   demoUrl?: string;
   statusNotes?: string;
   certificateUrl?: string;
+  hackathonCertificateUrl?: string;
 }
 
 export const featuredProjects: Project[] = [
@@ -313,6 +314,7 @@ export const featuredProjects: Project[] = [
     statusNotes:
       'Awarded 2nd Prize at KPR College. Source code repository available on GitHub.',
     certificateUrl: '/certificates/kpr-neuroverse-certificate.jpg',
+    hackathonCertificateUrl: '/certificates/vit-dataquest-hackathon-certificate.pdf',
   },
   {
     id: 'setu',

@@ -399,6 +399,11 @@ export default function Projects() {
                   View Award Certificate
                 </Button>
               )}
+              {selectedProject.hackathonCertificateUrl && (
+                <Button href={selectedProject.hackathonCertificateUrl} variant="outline" size="sm" icon="external">
+                  View DataQuest 3 Certificate
+                </Button>
+              )}
               {selectedProject.demoUrl && (
                 <Button href={selectedProject.demoUrl} variant="primary" size="sm" icon="external">
                   Live Deployment

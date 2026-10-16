@@ -12,6 +12,8 @@ interface ButtonProps {
   className?: string;
   type?: 'button' | 'submit' | 'reset';
   disabled?: boolean;
+  target?: string;
+  rel?: string;
 }
 
 export default function Button({
@@ -24,6 +26,8 @@ export default function Button({
   className = '',
   type = 'button',
   disabled = false,
+  target,
+  rel,
 }: ButtonProps) {
   const baseStyles =
     'btn-tactile inline-flex items-center justify-center gap-2 font-mono font-medium rounded-md transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-accent';
@@ -58,11 +62,19 @@ export default function Button({
   const cls = `${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`;
 
   if (href) {
+    const isNewTab =
+      target === '_blank' ||
+      (!target &&
+        (href.startsWith('http') ||
+          href.startsWith('/certificates') ||
+          href.endsWith('.pdf') ||
+          href.endsWith('.jpg') ||
+          href.endsWith('.png')));
     return (
       <a
         href={href}
-        target={href.startsWith('http') ? '_blank' : undefined}
-        rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
+        target={target || (isNewTab ? '_blank' : undefined)}
+        rel={rel || (isNewTab ? 'noopener noreferrer' : undefined)}
         className={cls}
       >
         {children}

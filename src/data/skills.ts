@@ -74,6 +74,7 @@ export interface TrainingExperienceItem {
   description: string;
   details: string[];
   certificateUrl?: string;
+  hackathonCertificateUrl?: string;
 }
 
 export const trainingExperiences: TrainingExperienceItem[] = [
@@ -111,7 +112,7 @@ export const trainingExperiences: TrainingExperienceItem[] = [
   {
     id: 'wele-internship',
     title: 'WeLe Internship Selection',
-    organization: 'WeLe (wele.ai)',
+    organization: 'WeLe (wele.ai) × VIT Chennai',
     type: 'Opportunity Selection',
     badge: 'Selected / Offered',
     description:
@@ -122,6 +123,7 @@ export const trainingExperiences: TrainingExperienceItem[] = [
       'Status: Offered/selected (not labeled as completed)',
     ],
     certificateUrl: '/certificates/wele-internship-certificate.jpg',
+    hackathonCertificateUrl: '/certificates/vit-dataquest-hackathon-certificate.pdf',
   },
   {
     id: 'shaastra-iit',
