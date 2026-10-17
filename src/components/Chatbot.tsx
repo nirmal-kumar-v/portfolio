@@ -82,20 +82,80 @@ function renderRichInline(content: string): React.ReactNode {
     }
 
     const label = match[1];
-    const url = match[2];
+    let url = match[2].trim();
+
+    // Sanitize any dummy/example domain hallucination from LLMs to real local paths
+    if (url.includes('example.com') || url.includes('example.org')) {
+      const lower = (label + ' ' + url).toLowerCase();
+      if (lower.includes('tamil') || lower.includes('mandram')) {
+        url = '/certificates/tamil-mandram-hackathon-certificate.jpg';
+      } else if (lower.includes('devforge') || lower.includes('pos')) {
+        url = '/certificates/devforge-certificate.jpg';
+      } else if (lower.includes('wele') || lower.includes('internship')) {
+        url = '/certificates/wele-internship-certificate.jpg';
+      } else if (lower.includes('dataquest') || lower.includes('vit')) {
+        url = '/certificates/vit-dataquest-hackathon-certificate.pdf';
+      } else if (lower.includes('mist') && (lower.includes('front') || lower.includes('8'))) {
+        url = '/certificates/mist-frontend-development-certificate.pdf';
+      } else if (lower.includes('mist')) {
+        url = '/certificates/mist-web-technology-certificate.png';
+      } else if (lower.includes('hci')) {
+        url = '/certificates/nptel-hci-certificate.pdf';
+      } else if (lower.includes('network')) {
+        url = '/certificates/nptel-networking-certificate.pdf';
+      } else if (lower.includes('hcl') || lower.includes('llm') || lower.includes('python')) {
+        url = '/certificates/hcl-ai-llm-python-certificate.pdf';
+      } else if (lower.includes('react')) {
+        url = '/certificates/kec-reactjs-certificate.jpg';
+      } else if (lower.includes('paac') || lower.includes('gfg')) {
+        url = '/certificates/gfg-kec-training-certificate.pdf';
+      } else if (lower.includes('kpr') || lower.includes('careerlens')) {
+        url = '/certificates/kpr-neuroverse-certificate.jpg';
+      } else if (lower.includes('ieee') || lower.includes('vortex') || lower.includes('bci')) {
+        url = '/certificates/ieee-vortex-certificate.jpg';
+      } else if (lower.includes('shaastra')) {
+        url = '/certificates/iit-madras-shaastra-certificates.pdf';
+      } else if (lower.includes('10th')) {
+        url = '/results/10th-result.pdf';
+      } else if (lower.includes('11th')) {
+        url = '/results/11th-result.pdf';
+      } else if (lower.includes('12th')) {
+        url = '/results/12th-result.pdf';
+      } else if (lower.includes('sem 1') || lower.includes('semester 1')) {
+        url = '/results/semester-1-result.pdf';
+      } else if (lower.includes('sem 2') || lower.includes('semester 2')) {
+        url = '/results/semester-2-result.pdf';
+      } else if (lower.includes('sem 3') || lower.includes('semester 3')) {
+        url = '/results/semester-3-result.pdf';
+      } else if (lower.includes('sem 4') || lower.includes('semester 4')) {
+        url = '/results/semester-4-result.pdf';
+      } else {
+        const cleaned = url.replace(/^https?:\/\/(www\.)?example\.(com|org)/i, '');
+        if (cleaned.includes('/certificates/') || cleaned.includes('/results/')) {
+          url = cleaned.startsWith('/') ? cleaned : '/' + cleaned;
+        } else {
+          url = '#';
+        }
+      }
+    }
+
     const isCertificate = url.includes('/certificates') || url.includes('/results');
 
     parts.push(
       <a
         key={`link-${matchIdx}`}
         href={url}
-        target="_blank"
+        target={url === '#' ? '_self' : '_blank'}
         rel="noopener noreferrer"
-        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded font-mono text-[11px] font-semibold transition-all my-0.5 cursor-pointer select-none group ${
-          isCertificate
+        onClick={(e) => {
+          if (url === '#' || url.includes('example.com') || url.includes('example.org')) {
+            e.preventDefault();
+          }
+        }}
+        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded font-mono text-[11px] font-semibold transition-all my-0.5 cursor-pointer select-none group ${isCertificate
             ? 'bg-gold/15 text-gold border border-gold/40 hover:bg-gold hover:text-bg-primary shadow-[0_2px_0_0_#b45309]'
             : 'bg-accent/15 text-accent border border-accent/40 hover:bg-accent hover:text-bg-primary shadow-[0_2px_0_0_#0284c7]'
-        }`}
+          }`}
         title={`Open ${label} in new tab`}
       >
         {isCertificate && <Award className="w-3 h-3 flex-shrink-0" />}
@@ -260,19 +320,17 @@ function FormattedMessage({ text }: { text: string }) {
               return (
                 <div
                   key={lIdx}
-                  className={`${
-                    isSubBullet
+                  className={`${isSubBullet
                       ? 'pl-5 flex items-start gap-1.5'
                       : isBullet
-                      ? 'pl-1.5 flex items-start gap-1.5'
-                      : ''
-                  }`}
+                        ? 'pl-1.5 flex items-start gap-1.5'
+                        : ''
+                    }`}
                 >
                   {isBullet && (
                     <span
-                      className={`font-bold mt-0.5 flex-shrink-0 ${
-                        isSubBullet ? 'text-text-muted text-[10px]' : 'text-accent'
-                      }`}
+                      className={`font-bold mt-0.5 flex-shrink-0 ${isSubBullet ? 'text-text-muted text-[10px]' : 'text-accent'
+                        }`}
                     >
                       {isSubBullet ? '–' : '•'}
                     </span>
@@ -322,11 +380,10 @@ async function requestChatResponse(
   // 2. Direct client-side fetch to Groq API via CORS
   if (activeKey) {
     const candidateModels = [
-      'openai/gpt-oss-20b',
-      'openai/gpt-oss-120b',
       'qwen/qwen3.8-27b',
-      'llama-3.3-70b-versatile',
-      'llama-3.1-8b-instant',
+      'openai/gpt-oss-120b',
+      'openai/gpt-oss-20b',
+      'allam-2-7b',
     ];
 
     for (const model of candidateModels) {
@@ -340,14 +397,14 @@ async function requestChatResponse(
           body: JSON.stringify({
             model,
             messages: conversationHistory,
-            temperature: 0.3,
-            max_tokens: 384,
+            temperature: 0.4,
+            max_tokens: 600,
           }),
         });
 
         if (groqRes.ok) {
           const groqData = await groqRes.json();
-          const reply = groqData?.choices?.[0]?.message?.content;
+          const reply = groqData?.choices?.[0]?.message?.content?.trim();
           if (reply) return reply;
         }
         // If 429 or other error, try next candidate model immediately
@@ -807,11 +864,10 @@ export default function Chatbot() {
           onClick={() => setIsOpen(!isOpen)}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className={`relative p-3.5 sm:p-4 rounded-full shadow-[0_0_25px_rgba(56,189,248,0.3)] border transition-all cursor-pointer flex items-center justify-center ${
-            isOpen
+          className={`relative p-3.5 sm:p-4 rounded-full shadow-[0_0_25px_rgba(56,189,248,0.3)] border transition-all cursor-pointer flex items-center justify-center ${isOpen
               ? 'bg-bg-card border-accent text-accent'
               : 'bg-accent text-bg-primary border-accent-light hover:brightness-110'
-          }`}
+            }`}
           aria-label={isOpen ? 'Close assistant' : 'Open Nirmal AI assistant'}
         >
           {isOpen ? (
@@ -894,11 +950,10 @@ export default function Chatbot() {
                   className={`flex flex-col ${m.sender === 'user' ? 'items-end' : 'items-start'}`}
                 >
                   <div
-                    className={`max-w-[85%] rounded-2xl p-3 sm:p-3.5 shadow-sm ${
-                      m.sender === 'user'
+                    className={`max-w-[85%] rounded-2xl p-3 sm:p-3.5 shadow-sm ${m.sender === 'user'
                         ? 'bg-accent text-bg-primary font-mono text-xs font-medium rounded-tr-none shadow-[0_2px_0_0_#0284c7]'
                         : 'bg-bg-card border border-border text-text-primary rounded-tl-none'
-                    }`}
+                      }`}
                   >
                     {m.sender === 'user' ? (
                       <p className="whitespace-pre-wrap">{m.text}</p>
@@ -932,17 +987,15 @@ export default function Chatbot() {
                     initial={{ opacity: 0, height: 0, y: 5 }}
                     animate={{ opacity: 1, height: 'auto', y: 0 }}
                     exit={{ opacity: 0, height: 0, y: 5 }}
-                    className={`mb-2 px-3 py-1.5 rounded-lg border text-[11px] font-mono flex items-center justify-between ${
-                      cooldown > 20
+                    className={`mb-2 px-3 py-1.5 rounded-lg border text-[11px] font-mono flex items-center justify-between ${cooldown > 20
                         ? 'bg-rose-500/15 border-rose-500/40 text-rose-300'
                         : 'bg-accent/15 border-accent/40 text-accent'
-                    }`}
+                      }`}
                   >
                     <span className="flex items-center gap-1.5">
                       <Clock
-                        className={`w-3.5 h-3.5 animate-spin ${
-                          cooldown > 20 ? 'text-rose-400' : 'text-accent'
-                        }`}
+                        className={`w-3.5 h-3.5 animate-spin ${cooldown > 20 ? 'text-rose-400' : 'text-accent'
+                          }`}
                       />
                       <span>
                         {cooldown > 20
@@ -951,11 +1004,10 @@ export default function Chatbot() {
                       </span>
                     </span>
                     <span
-                      className={`font-bold text-xs px-2 py-0.5 rounded ${
-                        cooldown > 20
+                      className={`font-bold text-xs px-2 py-0.5 rounded ${cooldown > 20
                           ? 'bg-rose-500/30 text-rose-200'
                           : 'bg-accent/25 text-accent-light'
-                      }`}
+                        }`}
                     >
                       {cooldown > 60
                         ? `${Math.floor(cooldown / 60)}m ${cooldown % 60}s`

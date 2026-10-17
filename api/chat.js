@@ -46,16 +46,15 @@ export default async function handler(req, res) {
       return;
     }
 
-    // Call Groq API with ultra-efficient openai/gpt-oss-20b model first (fast, smart reasoning)
+    // Call Groq API with creative, fast qwen/qwen3.8-27b first, falling back to openai/gpt-oss-120b and openai/gpt-oss-20b
     const candidateModels = [
-      'openai/gpt-oss-20b',
-      'openai/gpt-oss-120b',
       'qwen/qwen3.8-27b',
-      'llama-3.3-70b-versatile',
-      'llama-3.1-8b-instant',
+      'openai/gpt-oss-120b',
+      'openai/gpt-oss-20b',
+      'allam-2-7b',
     ];
 
-    let response = null;
+    let reply = '';
     let successfulModel = '';
 
     for (const model of candidateModels) {
@@ -69,34 +68,35 @@ export default async function handler(req, res) {
           body: JSON.stringify({
             model,
             messages: messages || [],
-            temperature: 0.3,
-            max_tokens: 384,
+            temperature: 0.4,
+            max_tokens: 600,
           }),
         });
 
         if (res.ok) {
-          response = res;
-          successfulModel = model;
-          break;
+          const data = await res.json();
+          const text = data?.choices?.[0]?.message?.content?.trim();
+          if (text) {
+            reply = text;
+            successfulModel = model;
+            break;
+          }
         }
-        // If 429 or other error, try next candidate model immediately
+        // If 429, empty content, or other error, try next candidate model immediately
       } catch {
         // Try next model
       }
     }
 
-    if (!response || !response.ok) {
-      throw new Error('All candidate Groq models failed or returned non-200');
+    if (!reply) {
+      throw new Error('All candidate Groq models failed or returned empty content');
     }
-
-    const data = await response.json();
-    const reply = data?.choices?.[0]?.message?.content || '';
 
     if (res && res.status) {
       return res.status(200).json({
         status: 'success',
         reply,
-        model: data?.model || 'openai/gpt-oss-120b',
+        model: successfulModel,
       });
     }
     return { status: 'success', reply };
