@@ -29,7 +29,7 @@ A modern, tactile, and engineering-driven personal portfolio website for **Nirma
      4. *ChangeWave / Community Welfare Management System* (Social Welfare Impact Platform — 1st Place Red Ribbon Club, 2nd Place CSI Solo, 2nd Place CSI Team)
      5. *CareerLens* (Developer Profile Analytics Engine — 2nd Prize, KPR College)
      6. *SETU* (Societal Engagement & Technology Utility — Civic Orchestration Concept)
-   - **Secondary Catalog ("More Projects")**: Compact entries for *Bilingual College Chatbot*, *Learning Tracker*, *Secure Vault*, *Campus Course Chat*, *Perundurai Water Issue Reporting*, *EV Battery Project*, *ESP32 Hospital Asset Tracker*, *Flask + Oracle CRUD Application*, and *Personal Portfolio*.
+   - **Secondary Catalog ("More Projects")**: Compact entries for *Bilingual College Chatbot*, *Learning Tracker*, *Secure Vault*, *Campus Course Chat*, *Perundurai Water Issue Reporting*, *EV Battery Project*, *Streak Up Karo*, and *Personal Portfolio*.
 
 5. **Verified Achievements (Strictly 9 Records)**:
    - Exactly 9 prize-winning competition records categorized by 1st Prize and 2nd Place with full team, role, and event details.

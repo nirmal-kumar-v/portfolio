@@ -387,6 +387,8 @@ export interface MoreProjectItem {
   category: string;
   role: string;
   description: string;
+  features?: string[];
+  projectFocus?: string;
   team?: string[];
   contributors?: ProjectContributor[];
   teamMembers?: TeamMember[];
@@ -397,6 +399,37 @@ export interface MoreProjectItem {
 }
 
 export const moreProjects: MoreProjectItem[] = [
+  {
+    id: 'streak-up',
+    name: 'Streak Up Karo — Habit Tracking & Productivity Platform',
+    category: 'Habit Tracking & Productivity',
+    role: 'Sole Developer · Personal Project',
+    description:
+      'A full-stack productivity web application designed to help users build consistent habits, track daily tasks, maintain streaks, and stay motivated through social accountability.',
+    features: [
+      'Task Management: Create daily tasks and track completion.',
+      'Streak Tracking: Maintain an overall daily streak based on task completion.',
+      'Leaderboards: Compare progress through global rankings.',
+      'Social Accountability: Connect with friends and manage friend requests.',
+      'User Authentication: Secure login and personalized user accounts.',
+    ],
+    technologies: [
+      'React',
+      'TypeScript',
+      'Vite',
+      'Node.js',
+      'Express.js',
+      'PostgreSQL',
+      'Prisma ORM',
+      'JWT',
+      'Vercel',
+      'Render',
+    ],
+    projectFocus:
+      'Habit formation, progress tracking, user engagement, and full-stack application development.',
+    demoUrl: 'https://streakup-karo.vercel.app/',
+    githubUrl: 'https://github.com/nirmal-kumar-v/streakUp',
+  },
   {
     id: 'bilingual-chatbot',
     name: 'Bilingual College Chatbot',
@@ -502,24 +535,6 @@ export const moreProjects: MoreProjectItem[] = [
       { name: 'Vaseegaran' },
     ],
     technologies: ['Python', 'Node.js', 'IoT Telemetry', 'Database Integration'],
-  },
-  {
-    id: 'esp32-hospital-tracker',
-    name: 'ESP32 Hospital Asset Tracker',
-    category: 'IoT / Healthcare Hardware',
-    role: 'Developer',
-    description:
-      'Exploratory hardware asset tracking system concept utilizing ESP32 microcontrollers for monitoring location-sensitive medical equipment. Further technical documentation is currently unpublished.',
-    technologies: ['ESP32', 'C/C++', 'IoT Sensors'],
-  },
-  {
-    id: 'flask-oracle-crud',
-    name: 'Flask + Oracle CRUD Application',
-    category: 'Enterprise Database Backend',
-    role: 'Developer',
-    description:
-      'A database management backend application built with Python Flask and Oracle relational database. Further project documentation is currently unpublished.',
-    technologies: ['Python', 'Flask', 'Oracle DB', 'SQL'],
   },
   {
     id: 'personal-portfolio',

@@ -1,10 +1,8 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { UserCheck, Code2, Award, ChevronRight, CheckCircle2 } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import SectionHeader from '../components/SectionHeader';
-import TechBadge from '../components/TechBadge';
 import { aboutBio, personalInfo } from '../data/personal';
-import { skillCategories, leadershipRecords, type LeadershipItem } from '../data/skills';
+import { leadershipRecords, type LeadershipItem } from '../data/skills';
 import Modal from '../components/Modal';
 
 export default function About() {
@@ -20,7 +18,7 @@ export default function About() {
         />
 
         {/* Narrative Bio */}
-        <div className="grid lg:grid-cols-12 gap-8 mb-20">
+        <div className="grid lg:grid-cols-12 gap-8 mb-16">
           <div className="lg:col-span-8 space-y-4 text-base sm:text-lg text-text-secondary leading-relaxed font-sans">
             {aboutBio.split('\n\n').map((paragraph, idx) => (
               <p key={idx}>{paragraph}</p>
@@ -57,64 +55,6 @@ export default function About() {
                 <span className="text-gold font-bold">9 Reported Prizes</span>
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* Technical Skills Categories — Strictly NO percentage bars */}
-        <div className="mb-20">
-          <div className="flex items-center justify-between mb-8 pb-3 border-b border-border">
-            <div>
-              <span className="text-xs font-mono tracking-[0.2em] uppercase text-accent font-semibold">
-                Technical Proficiencies
-              </span>
-              <h3 className="text-2xl font-bold text-text-primary mt-1">
-                Verified Skills by Domain
-              </h3>
-            </div>
-            <span className="text-xs font-mono text-text-tertiary hidden sm:block">
-              Evidence-based categorization (No arbitrary percentage bars)
-            </span>
-          </div>
-
-          <div className="grid lg:grid-cols-3 gap-6">
-            {skillCategories.map((cat) => (
-              <div
-                key={cat.title}
-                className="pixel-card p-6 rounded-lg border border-border bg-bg-card flex flex-col justify-between"
-              >
-                <div>
-                  <h4 className="text-base font-bold text-text-primary mb-1">
-                    {cat.title}
-                  </h4>
-                  <p className="text-xs text-text-tertiary font-mono mb-5">
-                    {cat.subtitle}
-                  </p>
-
-                  <div className="space-y-3">
-                    {cat.skills.map((s) => (
-                      <div
-                        key={s.name}
-                        className="p-3 rounded bg-bg-secondary/70 border border-border/60 text-xs"
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="font-bold text-text-primary font-mono">{s.name}</span>
-                          {s.tag && (
-                            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-accent/10 text-accent-light border border-accent/20">
-                              {s.tag}
-                            </span>
-                          )}
-                        </div>
-                        {s.note && (
-                          <p className="text-text-secondary text-[11px] mt-1.5 leading-relaxed font-sans">
-                            {s.note}
-                          </p>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
 

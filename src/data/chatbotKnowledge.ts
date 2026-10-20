@@ -74,6 +74,7 @@ DO NOT use emojis in regular professional answers. Reserve emojis ONLY for savag
 - Perundurai Water Issue Reporting: Nirmal Kumar V., Narmatha G., Lavanya (O Grade).
 
 ### 7. PROJECTS ARCHITECTURE & DETAILS
+- Streak Up Karo: Full-stack habit tracking & productivity platform designed to help users build consistent habits, track daily tasks, maintain streaks, and stay motivated through social accountability. Key Features: Task Management, Streak Tracking, Leaderboards, Social Accountability, User Authentication. Tech stack: React, TypeScript, Vite, Node.js, Express.js, PostgreSQL, Prisma ORM, JWT, Vercel, Render. [Live Demo](https://streakup-karo.vercel.app/) | [GitHub](https://github.com/nirmal-kumar-v/streakUp)
 - ChangeWave / Community Welfare Management System: CRITICAL: ChangeWave is a Community Welfare Management System / Social Campaign Impact Analytics platform (social campaign coordination, volunteer tracking, before-and-after participant surveying, sentiment analysis on community feedback; presented for NBA accreditation evaluation). IT IS NOT a civic issue reporting system. [Live Demo](https://changewave.tech) | [GitHub](https://github.com/nirmal-kumar-v/changewave)
 - Kongu Kural: Multilingual AI chatbot supporting Tamil, Tanglish, English, and Hindi, integrated with an Android Termux SMS gateway for offline queries (1st Prize, Tamil Mandram 24h Hackathon). [Live Demo](https://kongu-kural.vercel.app) | [GitHub](https://github.com/nirmal-kumar-v/kongu-kural)
 - Integrated Retail POS & Store Management: Unified offline-first retail operations system featuring local transaction queueing, synchronization engine, and role-based access control (1st Place, DevForge 2K26 24h Hackathon). [GitHub](https://github.com/nirmal-kumar-v/Store-Management-System)
@@ -468,6 +469,19 @@ export function getOfflineAnswer(query: string, history: ChatMessage[] = []): st
   if (q.includes('setu') || q.includes('sih') || q.includes('smart india')) {
     return "**SETU (Societal Engagement and Technology Utility)** is a civic-action orchestration platform developed for the Smart India Hackathon (SIH 2026) internal review sprint connecting verified citizen complaints with university engineering capstones, CSR sponsors, and government departments. [Live Demo](https://setu-connect.vercel.app/) | [GitHub](https://github.com/nirmal-kumar-v/SETU)";
   }
+  if (q.includes('streak') || q.includes('streakup') || q.includes('streak up') || q.includes('habit')) {
+    return "**Streak Up Karo** is a full-stack productivity web application designed to help users build consistent habits, track daily tasks, maintain streaks, and stay motivated through social accountability.\n\n" +
+      "• **Key Features**:\n" +
+      "  - **Task Management**: Create daily tasks and track completion.\n" +
+      "  - **Streak Tracking**: Maintain an overall daily streak based on task completion.\n" +
+      "  - **Leaderboards**: Compare progress through global rankings.\n" +
+      "  - **Social Accountability**: Connect with friends and manage friend requests.\n" +
+      "  - **User Authentication**: Secure login and personalized user accounts.\n" +
+      "• **Tech Stack**: React, TypeScript, Vite, Node.js, Express.js, PostgreSQL, Prisma ORM, JWT, Vercel, Render.\n" +
+      "• **Project Focus**: Habit formation, progress tracking, user engagement, and full-stack application development.\n" +
+      "• **Live Demo**: [Streak Up Karo Live](https://streakup-karo.vercel.app/)\n" +
+      "• **GitHub**: [Streak Up GitHub Repository](https://github.com/nirmal-kumar-v/streakUp)";
+  }
   if (q.includes('secure vault')) {
     return "**Secure Vault** is a full-stack credential management web application built with the MERN stack supporting user authentication and CRUD operations with AES concepts. [Live Demo](https://secure-vault-coral.vercel.app/) | [GitHub](https://github.com/nirmal-kumar-v/SecureVault)";
   }
@@ -728,14 +742,15 @@ export function getOfflineAnswer(query: string, history: ChatMessage[] = []): st
   // 19. ALL PROJECTS INQUIRY
   if (q.includes('project') || q.includes('portfolio') || q.includes('built') || q.includes('app')) {
     return "Nirmal has engineered multiple production-ready systems:\n\n" +
-      "1. **Secure Vault**: Full-stack credential management with AES encryption concepts. [Live Demo](https://secure-vault-coral.vercel.app/) | [GitHub](https://github.com/nirmal-kumar-v/SecureVault)\n" +
+      "1. **Streak Up Karo**: Full-stack habit tracking & productivity platform with daily streaks, leaderboards, and social accountability. [Live Demo](https://streakup-karo.vercel.app/) | [GitHub](https://github.com/nirmal-kumar-v/streakUp)\n" +
       "2. **Kongu Kural**: Multilingual AI chatbot with Android Termux SMS gateway (1st Prize, Tamil Mandram 24h Hackathon). [Live Demo](https://kongu-kural.vercel.app) | [GitHub](https://github.com/nirmal-kumar-v/kongu-kural)\n" +
       "3. **OptiVest / PortfolioIQ**: Portfolio optimization platform with Modern Portfolio Theory and 10,000 Monte Carlo runs (1st Prize, CoE Hackathon). [Live Demo](https://optivest-psi.vercel.app/) | [GitHub](https://github.com/nirmal-kumar-v/Portfolio-Risk-and-Return-Optimization)\n" +
       "4. **Retail POS & Store Management**: Offline-resilient store system with SQLite local caching (1st Place, DevForge 2K26 24h Hackathon). [GitHub](https://github.com/nirmal-kumar-v/Store-Management-System)\n" +
       "5. **ChangeWave**: Community Welfare Management System / Social Campaign Impact Analytics (1st Place, Red Ribbon Club 8h Hackathon). [Live Demo](https://changewave.tech) | [GitHub](https://github.com/nirmal-kumar-v/changewave)\n" +
-      "6. **SETU**: SIH 2026 civic-action orchestration platform. [Live Demo](https://setu-connect.vercel.app/) | [GitHub](https://github.com/nirmal-kumar-v/SETU)\n" +
-      "7. **Campus Course Chat (CCC)**: 3rd Sem Design Thinking Lab (O Grade). [Live Demo](https://campus-course-chat.netlify.app/) | [GitHub](https://github.com/nirmal-kumar-v/ccc)\n" +
-      "8. **Perundurai Water Issue Reporting**: 3rd Sem Mini Project (O Grade). [Live Demo](https://perundurai-water-system.netlify.app/) | [GitHub](https://github.com/nirmal-kumar-v/perundurai-water-issue-reporting-system)";
+      "6. **Secure Vault**: Full-stack credential management with AES encryption concepts. [Live Demo](https://secure-vault-coral.vercel.app/) | [GitHub](https://github.com/nirmal-kumar-v/SecureVault)\n" +
+      "7. **SETU**: SIH 2026 civic-action orchestration platform. [Live Demo](https://setu-connect.vercel.app/) | [GitHub](https://github.com/nirmal-kumar-v/SETU)\n" +
+      "8. **Campus Course Chat (CCC)**: 3rd Sem Design Thinking Lab (O Grade). [Live Demo](https://campus-course-chat.netlify.app/) | [GitHub](https://github.com/nirmal-kumar-v/ccc)\n" +
+      "9. **Perundurai Water Issue Reporting**: 3rd Sem Mini Project (O Grade). [Live Demo](https://perundurai-water-system.netlify.app/) | [GitHub](https://github.com/nirmal-kumar-v/perundurai-water-issue-reporting-system)";
   }
 
   // 20. SKILLS & TECH STACK

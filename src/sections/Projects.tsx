@@ -480,6 +480,22 @@ export default function Projects() {
               </p>
             </div>
 
+            {selectedMoreProject.features && selectedMoreProject.features.length > 0 && (
+              <div>
+                <h4 className="text-xs font-mono uppercase tracking-wider text-accent font-semibold mb-2">
+                  Key Features
+                </h4>
+                <ul className="space-y-2">
+                  {selectedMoreProject.features.map((feat) => (
+                    <li key={feat} className="flex items-start gap-2 text-xs text-text-secondary">
+                      <span className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 flex-shrink-0" />
+                      <span>{feat}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
             {selectedMoreProject.technologies && selectedMoreProject.technologies.length > 0 && (
               <div>
                 <h4 className="text-xs font-mono uppercase tracking-wider text-accent font-semibold mb-2">
@@ -490,6 +506,13 @@ export default function Projects() {
                     <TechBadge key={t} name={t} size="sm" />
                   ))}
                 </div>
+              </div>
+            )}
+
+            {selectedMoreProject.projectFocus && (
+              <div className="p-3 rounded bg-bg-card/70 border border-border/80 text-xs font-mono text-text-tertiary">
+                <span className="text-text-secondary font-semibold">Project Focus: </span>
+                {selectedMoreProject.projectFocus}
               </div>
             )}
 
